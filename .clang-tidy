@@ -1,0 +1,17 @@
+Checks: '-*,readability-identifier-naming'
+
+CheckOptions:
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+
+  - key: readability-identifier-naming.ParameterCase
+    value: camelBack
+
+  - key: readability-identifier-naming.MemberCase
+    value: camelBack
+
+  - key: readability-identifier-naming.GlobalVariableCase
+    value: camelBack
