@@ -15,18 +15,29 @@ int main(void) {
 
   SetTargetFPS(60);
 
-  Player p = {};
+  Player p = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f},
+              .vel = {0, 0}};
   double dt = 0;
 
+  Camera2D cam = {};
+  cam.target = p.pos;
+  cam.offset = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  cam.zoom = 1.0f;
+
   while (!WindowShouldClose()) {
+    cam.target = p.pos;
     dt = GetFrameTime();
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
+    DrawFPS(10, 10);
+
+    BeginMode2D(cam);
+
     DrawRectangle(p.pos.x, p.pos.y, 100, 100, BLACK);
 
-    DrawFPS(10, 10);
+    EndMode2D();
 
     EndDrawing();
 
