@@ -10,18 +10,25 @@ struct Player {
   Vector2 pos, vel;
 };
 
-void drawGrid(int spacing, int width, int height) {
-  width *= spacing;
-  height *= spacing;
+void drawGrid(int spacing, Camera2D cam) {
+  float screenW = (float)GetScreenWidth();
+  float screenH = (float)GetScreenHeight();
 
-  // Vertical lines
-  for (int x = 0; x <= width; x += spacing) {
-    DrawLine(x, 0, x, height, BLACK);
+  Vector2 topLeft     = GetScreenToWorld2D((Vector2){0, 0}, cam);
+  Vector2 bottomRight = GetScreenToWorld2D((Vector2){screenW, screenH}, cam);
+
+  int startX = ((int)topLeft.x / spacing) * spacing;
+  int endX   = ((int)bottomRight.x / spacing + 1) * spacing;
+
+  int startY = ((int)topLeft.y / spacing) * spacing;
+  int endY   = ((int)bottomRight.y / spacing + 1) * spacing;
+
+  for (int x = startX; x <= endX; x += spacing) {
+    DrawLine(x, startY, x, endY, LIGHTGRAY);
   }
 
-  // Horizontal lines
-  for (int y = 0; y <= height; y += spacing) {
-    DrawLine(0, y, width, y, BLACK);
+  for (int y = startY; y <= endY; y += spacing) {
+    DrawLine(startX, y, endX, y, LIGHTGRAY);
   }
 }
 
@@ -50,7 +57,7 @@ int main(void) {
 
     BeginMode2D(cam);
 
-    drawGrid(OFFSET, 100, 100);
+    drawGrid(OFFSET, cam);
 
     DrawRectangle(p.pos.x, p.pos.y, OFFSET, OFFSET, BLACK);
 
@@ -70,8 +77,8 @@ int main(void) {
       p.vel.x -= PLAYER_SPEED * dt;
     }
 
-    p.pos.x = p.pos.x + p.vel.x;
-    p.pos.y = p.pos.y + p.vel.y;
+    p.pos.x += p.vel.x * dt;
+    p.pos.y += p.vel.y * dt;
 
     p.vel.x *= 0.85;
     p.vel.y *= 0.85;
