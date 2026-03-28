@@ -4,6 +4,7 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 #define PLAYER_SPEED 300
+#define OFFSET 32
 
 struct Player {
   Vector2 pos, vel;
@@ -25,7 +26,7 @@ void drawGrid(int spacing, int width, int height) {
 }
 
 int main(void) {
-  SetConfigFlags(FLAG_FULLSCREEN_MODE);
+  SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
 
   SetTargetFPS(60);
@@ -35,7 +36,7 @@ int main(void) {
 
   Camera2D cam = {};
   cam.target   = p.pos;
-  cam.offset   = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  cam.offset   = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom     = 1.0f;
 
   while (!WindowShouldClose()) {
@@ -49,9 +50,9 @@ int main(void) {
 
     BeginMode2D(cam);
 
-    drawGrid(32, 100, 100);
+    drawGrid(OFFSET, 100, 100);
 
-    DrawRectangle(p.pos.x, p.pos.y, 100, 100, BLACK);
+    DrawRectangle(p.pos.x, p.pos.y, OFFSET, OFFSET, BLACK);
 
     EndMode2D();
 
@@ -74,6 +75,10 @@ int main(void) {
 
     p.vel.x *= 0.85;
     p.vel.y *= 0.85;
+
+    if (IsWindowResized()) {
+      cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
+    }
   }
 
   CloseWindow();

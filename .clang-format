@@ -42,3 +42,4 @@ SortIncludes: true
 # --- Misc ---
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
+InsertNewlineAtEOF: true
