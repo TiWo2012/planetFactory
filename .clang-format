@@ -1,0 +1,44 @@
+BasedOnStyle: LLVM
+
+# --- Indentation ---
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# --- Line width ---
+ColumnLimit: 100
+
+# --- Braces ---
+BreakBeforeBraces: Attach
+
+# --- Functions ---
+AllowShortFunctionsOnASingleLine: Empty
+
+# --- Control statements ---
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# --- Alignment (this is the important part) ---
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+AlignTrailingComments: true
+
+# --- Pointers ---
+PointerAlignment: Left
+
+# --- Spaces ---
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+
+# --- Line breaking ---
+BreakBeforeBinaryOperators: NonAssignment
+BinPackArguments: false
+BinPackParameters: false
+
+# --- Includes ---
+SortIncludes: true
+
+# --- Misc ---
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1

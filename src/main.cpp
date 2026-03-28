@@ -9,24 +9,38 @@ struct Player {
   Vector2 pos, vel;
 };
 
+void drawGrid(int spacing, int width, int height) {
+  width *= spacing;
+  height *= spacing;
+
+  // Vertical lines
+  for (int x = 0; x <= width; x += spacing) {
+    DrawLine(x, 0, x, height, BLACK);
+  }
+
+  // Horizontal lines
+  for (int y = 0; y <= height; y += spacing) {
+    DrawLine(0, y, width, y, BLACK);
+  }
+}
+
 int main(void) {
   SetConfigFlags(FLAG_FULLSCREEN_MODE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
 
   SetTargetFPS(60);
 
-  Player p = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f},
-              .vel = {0, 0}};
+  Player p  = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}, .vel = {0, 0}};
   double dt = 0;
 
   Camera2D cam = {};
-  cam.target = p.pos;
-  cam.offset = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
-  cam.zoom = 1.0f;
+  cam.target   = p.pos;
+  cam.offset   = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f};
+  cam.zoom     = 1.0f;
 
   while (!WindowShouldClose()) {
     cam.target = p.pos;
-    dt = GetFrameTime();
+    dt         = GetFrameTime();
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -34,6 +48,8 @@ int main(void) {
     DrawFPS(10, 10);
 
     BeginMode2D(cam);
+
+    drawGrid(32, 100, 100);
 
     DrawRectangle(p.pos.x, p.pos.y, 100, 100, BLACK);
 
