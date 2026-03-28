@@ -1,3 +1,4 @@
+#include <format>
 #include <math.h>
 #include <print>
 #include <raylib.h>
@@ -33,6 +34,20 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
+Vector2 getPosGrid(Player p) {
+  Vector2 out = {0, 0};
+
+  if (p.pos.x >= 0 && p.pos.y >= 0) {
+    out.x = std::floor(p.pos.x / OFFSET);
+    out.y = std::floor(p.pos.y / OFFSET);
+  } else {
+    out.x = std::ceil(p.pos.x / OFFSET);
+    out.y = std::ceil(p.pos.y / OFFSET);
+  }
+
+  return out;
+}
+
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
@@ -55,6 +70,8 @@ int main(void) {
     ClearBackground(RAYWHITE);
 
     DrawFPS(10, 10);
+
+    DrawText(std::format("{}, {}", getPosGrid(p).x, getPosGrid(p).y).c_str(), 10, 25, 20, BLACK);
 
     BeginMode2D(cam);
 
