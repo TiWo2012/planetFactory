@@ -1,3 +1,4 @@
+#include <math.h>
 #include <print>
 #include <raylib.h>
 
@@ -11,17 +12,17 @@ struct Player {
 };
 
 void drawGrid(int spacing, Camera2D cam) {
-  float screenW = (float)GetScreenWidth();
-  float screenH = (float)GetScreenHeight();
+  float screenW = GetScreenWidth();
+  float screenH = GetScreenHeight();
 
   Vector2 topLeft     = GetScreenToWorld2D((Vector2){0, 0}, cam);
   Vector2 bottomRight = GetScreenToWorld2D((Vector2){screenW, screenH}, cam);
 
-  int startX = ((int)topLeft.x / spacing) * spacing;
-  int endX   = ((int)bottomRight.x / spacing + 1) * spacing;
+  int startX = (int)floorf(topLeft.x / spacing) * spacing;
+  int endX   = (int)floorf(bottomRight.x / spacing + 1) * spacing;
 
-  int startY = ((int)topLeft.y / spacing) * spacing;
-  int endY   = ((int)bottomRight.y / spacing + 1) * spacing;
+  int startY = (int)floorf(topLeft.y / spacing) * spacing;
+  int endY   = (int)floorf(bottomRight.y / spacing + 1) * spacing;
 
   for (int x = startX; x <= endX; x += spacing) {
     DrawLine(x, startY, x, endY, LIGHTGRAY);
@@ -77,8 +78,8 @@ int main(void) {
       p.vel.x -= PLAYER_SPEED * dt;
     }
 
-    p.pos.x += p.vel.x * dt;
-    p.pos.y += p.vel.y * dt;
+    p.pos.x += p.vel.x;
+    p.pos.y += p.vel.y;
 
     p.vel.x *= 0.85;
     p.vel.y *= 0.85;
