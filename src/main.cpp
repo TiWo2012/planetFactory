@@ -5,7 +5,7 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define PLAYER_SPEED 300
+#define PLAYER_SPEED 200
 #define OFFSET 32
 
 struct Player {
@@ -98,8 +98,8 @@ int main(void) {
     p.pos.x += p.vel.x;
     p.pos.y += p.vel.y;
 
-    p.vel.x *= 0.85;
-    p.vel.y *= 0.85;
+    p.vel.x *= 0.70;
+    p.vel.y *= 0.70;
 
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
