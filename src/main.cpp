@@ -12,6 +12,10 @@ struct Player {
   Vector2 pos, vel;
 };
 
+enum class Objects {
+  Core,
+};
+
 void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();
   float screenH = GetScreenHeight();
@@ -48,6 +52,14 @@ Vector2 getPosGrid(Player p) {
   return out;
 }
 
+void drawObjectOnGrid(Objects obj, int x, int y) {
+  switch (obj) {
+  case Objects::Core: {
+    DrawRectangle(x * OFFSET, y * OFFSET, 4 * OFFSET, 4 * OFFSET, GREEN);
+  }
+  }
+}
+
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
@@ -77,6 +89,9 @@ int main(void) {
 
     drawGrid(OFFSET, cam);
 
+    drawObjectOnGrid(Objects::Core, 0, 0);
+
+    // draw the player. always last!
     DrawRectangle(p.pos.x, p.pos.y, OFFSET, OFFSET, BLACK);
 
     EndMode2D();
