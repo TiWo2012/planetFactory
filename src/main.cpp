@@ -1,3 +1,4 @@
+#include <array>
 #include <format>
 #include <math.h>
 #include <print>
@@ -14,6 +15,17 @@ struct Player {
 
 enum class Objects {
   Core,
+};
+
+enum class Items { Air = 0, Belt, Miner };
+
+struct Slot {
+  Items item;
+  int   ammount;
+};
+
+struct Inventory {
+  std::array<Slot, 64> items;
 };
 
 void drawGrid(int spacing, Camera2D cam) {
@@ -60,14 +72,67 @@ void drawObjectOnGrid(Objects obj, int x, int y) {
   }
 }
 
+void drawInv(const Inventory& inv) {
+  for (const Slot& slot : inv.items) {
+    std::println("{} x{}", (int)slot.item, slot.ammount);
+  }
+}
+
+Vector2 getMousePosGrid(Camera2D cam) {
+  Vector2 mouseScreen = GetMousePosition();
+  Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);
+
+  Vector2 out = {0, 0};
+
+  if (mouseWorld.x >= 0 && mouseWorld.y >= 0) {
+    out.x = std::floor(mouseWorld.x / OFFSET);
+    out.y = std::floor(mouseWorld.y / OFFSET);
+  } else {
+    out.x = std::ceil(mouseWorld.x / OFFSET);
+    out.y = std::ceil(mouseWorld.y / OFFSET);
+  }
+
+  return out;
+}
+
+void movePlayer(Player& p, double dt) {
+  Vector2 dir = {0.0f, 0.0f};
+
+  if (IsKeyDown(KEY_W))
+    dir.y -= 1.0f;
+  if (IsKeyDown(KEY_S))
+    dir.y += 1.0f;
+  if (IsKeyDown(KEY_D))
+    dir.x += 1.0f;
+  if (IsKeyDown(KEY_A))
+    dir.x -= 1.0f;
+
+  // normalize only if moving
+  if (dir.x != 0.0f || dir.y != 0.0f) {
+    float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    dir.x /= len;
+    dir.y /= len;
+
+    p.vel.x += dir.x * PLAYER_SPEED * dt;
+    p.vel.y += dir.y * PLAYER_SPEED * dt;
+  }
+
+  p.pos.x += p.vel.x;
+  p.pos.y += p.vel.y;
+
+  p.vel.x *= 0.70f;
+  p.vel.y *= 0.70f;
+}
+
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
 
   SetTargetFPS(60);
 
-  Player p  = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}, .vel = {0, 0}};
-  double dt = 0;
+  Player    p   = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}, .vel = {0, 0}};
+  double    dt  = 0;
+  Inventory inv = {};
 
   Camera2D cam = {};
   cam.target   = p.pos;
@@ -98,23 +163,7 @@ int main(void) {
 
     EndDrawing();
 
-    if (IsKeyDown(KEY_W)) {
-      p.vel.y -= PLAYER_SPEED * dt;
-    } else if (IsKeyDown(KEY_S)) {
-      p.vel.y += PLAYER_SPEED * dt;
-    }
-
-    if (IsKeyDown(KEY_D)) {
-      p.vel.x += PLAYER_SPEED * dt;
-    } else if (IsKeyDown(KEY_A)) {
-      p.vel.x -= PLAYER_SPEED * dt;
-    }
-
-    p.pos.x += p.vel.x;
-    p.pos.y += p.vel.y;
-
-    p.vel.x *= 0.70;
-    p.vel.y *= 0.70;
+    movePlayer(p, dt);
 
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
