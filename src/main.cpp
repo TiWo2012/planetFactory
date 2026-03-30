@@ -74,8 +74,10 @@ void drawObjectOnGrid(Objects obj, int x, int y) {
 
 void drawInv(const Inventory& inv) {
   for (const Slot& slot : inv.items) {
-    std::println("{} x{}", (int)slot.item, slot.ammount);
+    std::print("{} x{},", (int)slot.item, slot.ammount);
   }
+
+  std::print("\n");
 }
 
 Vector2 getMousePosGrid(Camera2D cam) {
@@ -134,6 +136,8 @@ int main(void) {
   double    dt  = 0;
   Inventory inv = {};
 
+  Vector2 mousePos = {0, 0};
+
   Camera2D cam = {};
   cam.target   = p.pos;
   cam.offset   = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
@@ -142,6 +146,7 @@ int main(void) {
   while (!WindowShouldClose()) {
     cam.target = p.pos;
     dt         = GetFrameTime();
+    mousePos   = getMousePosGrid(cam);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -164,6 +169,12 @@ int main(void) {
     EndDrawing();
 
     movePlayer(p, dt);
+
+    if (mousePos.x >= 0 && mousePos.x < 4 && mousePos.y >= 0 && mousePos.y < 4) {
+      if (IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT)) {
+        drawInv(inv);
+      }
+    }
 
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
