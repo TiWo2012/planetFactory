@@ -11,7 +11,7 @@
 
 class Player {
 public:
-  void movePlayer(double dt) {
+  void move(double dt) {
     Vector2 dir = {0.0f, 0.0f};
 
     if (IsKeyDown(KEY_W))
@@ -65,6 +65,10 @@ public:
 
   Vector2 getVel() {
     return vel;
+  }
+
+  void draw() {
+    DrawRectangle(pos.x, pos.y, OFFSET, OFFSET, BLACK);
   }
 
 private:
@@ -178,14 +182,13 @@ int main(void) {
 
     drawObjectOnGrid(Objects::Core, 0, 0);
 
-    // draw the player. always last!
-    DrawRectangle(p.getPos().x, p.getPos().y, OFFSET, OFFSET, BLACK);
+    p.draw();
 
     EndMode2D();
 
     EndDrawing();
 
-    p.movePlayer(dt);
+    p.move(dt);
 
     if (mousePos.x >= 0 && mousePos.x < 4 && mousePos.y >= 0 && mousePos.y < 4) {
       if (IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT)) {
