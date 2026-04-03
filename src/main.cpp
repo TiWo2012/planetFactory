@@ -1,15 +1,21 @@
+#include "constants.h"
+#include "core.h"
+#include "player.h"
+#include <array>
 #include <format>
 #include <math.h>
 #include <print>
 #include <raylib.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-#define PLAYER_SPEED 200
-#define OFFSET 32
+enum class Items { Air = 0, Belt, Miner };
 
-struct Player {
-  Vector2 pos, vel;
+struct Slot {
+  Items item;
+  int   ammount;
+};
+
+struct Inventory {
+  std::array<Slot, 64> items;
 };
 
 void drawGrid(int spacing, Camera2D cam) {
@@ -34,15 +40,26 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
-Vector2 getPosGrid(Player p) {
+void drawInv(const Inventory& inv) {
+  for (const Slot& slot : inv.items) {
+    std::print("{} x{},", (int)slot.item, slot.ammount);
+  }
+
+  std::print("\n");
+}
+
+Vector2 getMousePosGrid(Camera2D cam) {
+  Vector2 mouseScreen = GetMousePosition();
+  Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);
+
   Vector2 out = {0, 0};
 
-  if (p.pos.x >= 0 && p.pos.y >= 0) {
-    out.x = std::floor(p.pos.x / OFFSET);
-    out.y = std::floor(p.pos.y / OFFSET);
+  if (mouseWorld.x >= 0 && mouseWorld.y >= 0) {
+    out.x = std::floor(mouseWorld.x / OFFSET);
+    out.y = std::floor(mouseWorld.y / OFFSET);
   } else {
-    out.x = std::ceil(p.pos.x / OFFSET);
-    out.y = std::ceil(p.pos.y / OFFSET);
+    out.x = std::ceil(mouseWorld.x / OFFSET);
+    out.y = std::ceil(mouseWorld.y / OFFSET);
   }
 
   return out;
@@ -54,52 +71,52 @@ int main(void) {
 
   SetTargetFPS(60);
 
-  Player p  = {.pos = {SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f}, .vel = {0, 0}};
-  double dt = 0;
+  Player    player;
+  Core      core(0, 0);
+  double    dt  = 0;
+  Inventory inv = {};
+
+  Vector2 mousePos = {0, 0};
 
   Camera2D cam = {};
-  cam.target   = p.pos;
+  cam.target   = player.getPos();
   cam.offset   = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom     = 1.0f;
 
   while (!WindowShouldClose()) {
-    cam.target = p.pos;
+    cam.target = player.getPos();
     dt         = GetFrameTime();
+    mousePos   = getMousePosGrid(cam);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
     DrawFPS(10, 10);
 
-    DrawText(std::format("{}, {}", getPosGrid(p).x, getPosGrid(p).y).c_str(), 10, 25, 20, BLACK);
+    DrawText(std::format("{}, {}", player.getPosGrid().x, player.getPosGrid().y).c_str(),
+             10,
+             25,
+             20,
+             BLACK);
 
     BeginMode2D(cam);
 
     drawGrid(OFFSET, cam);
 
-    DrawRectangle(p.pos.x, p.pos.y, OFFSET, OFFSET, BLACK);
+    core.draw();
+
+    player.draw();
 
     EndMode2D();
 
     EndDrawing();
 
-    if (IsKeyDown(KEY_W)) {
-      p.vel.y -= PLAYER_SPEED * dt;
-    } else if (IsKeyDown(KEY_S)) {
-      p.vel.y += PLAYER_SPEED * dt;
+    player.move(dt);
+    core.collideWithPlayer(player);
+
+    if (core.isClicked()) {
+      drawInv(inv);
     }
-
-    if (IsKeyDown(KEY_D)) {
-      p.vel.x += PLAYER_SPEED * dt;
-    } else if (IsKeyDown(KEY_A)) {
-      p.vel.x -= PLAYER_SPEED * dt;
-    }
-
-    p.pos.x += p.vel.x;
-    p.pos.y += p.vel.y;
-
-    p.vel.x *= 0.70;
-    p.vel.y *= 0.70;
 
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};

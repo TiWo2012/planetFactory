@@ -12,6 +12,9 @@ endif()
 
 set(SOURCES
     src/main.cpp
+    src/player.cpp
+    src/object.cpp
+    src/core.cpp
 )
 
 add_executable(planetFactory ${SOURCES})
