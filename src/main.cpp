@@ -84,19 +84,19 @@ int main(void) {
 
   SetTargetFPS(60);
 
-  Player    p;
+  Player    player;
   double    dt  = 0;
   Inventory inv = {};
 
   Vector2 mousePos = {0, 0};
 
   Camera2D cam = {};
-  cam.target   = p.getPos();
+  cam.target   = player.getPos();
   cam.offset   = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom     = 1.0f;
 
   while (!WindowShouldClose()) {
-    cam.target = p.getPos();
+    cam.target = player.getPos();
     dt         = GetFrameTime();
     mousePos   = getMousePosGrid(cam);
 
@@ -105,7 +105,11 @@ int main(void) {
 
     DrawFPS(10, 10);
 
-    DrawText(std::format("{}, {}", p.getPosGrid().x, p.getPosGrid().y).c_str(), 10, 25, 20, BLACK);
+    DrawText(std::format("{}, {}", player.getPosGrid().x, player.getPosGrid().y).c_str(),
+             10,
+             25,
+             20,
+             BLACK);
 
     BeginMode2D(cam);
 
@@ -113,13 +117,13 @@ int main(void) {
 
     drawObjectOnGrid(Objects::Core, 0, 0);
 
-    p.draw();
+    player.draw();
 
     EndMode2D();
 
     EndDrawing();
 
-    p.move(dt);
+    player.move(dt);
 
     if (mousePos.x >= 0 && mousePos.x < 4 && mousePos.y >= 0 && mousePos.y < 4) {
       if (IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT)) {
