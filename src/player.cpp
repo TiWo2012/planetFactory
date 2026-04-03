@@ -15,7 +15,6 @@ void Player::move(double dt) {
   if (IsKeyDown(KEY_A))
     dir.x -= 1.0f;
 
-  // normalize only if moving
   if (dir.x != 0.0f || dir.y != 0.0f) {
     float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     dir.x /= len;
@@ -53,6 +52,10 @@ Player::Player() {
 
 Vector2 Player::getPos() {
   return pos;
+}
+
+void Player::setPos(Vector2 newPos) {
+  pos = newPos;
 }
 
 Vector2 Player::getVel() {

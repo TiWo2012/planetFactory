@@ -1,16 +1,11 @@
 #include "constants.h"
+#include "core.h"
 #include "player.h"
 #include <array>
 #include <format>
 #include <math.h>
 #include <print>
 #include <raylib.h>
-
-enum class Objects {
-  Core,
-  Belt,
-  Miner,
-};
 
 enum class Items { Air = 0, Belt, Miner };
 
@@ -42,14 +37,6 @@ void drawGrid(int spacing, Camera2D cam) {
 
   for (int y = startY; y <= endY; y += spacing) {
     DrawLine(startX, y, endX, y, LIGHTGRAY);
-  }
-}
-
-void drawObjectOnGrid(Objects obj, int x, int y) {
-  switch (obj) {
-  case Objects::Core: {
-    DrawRectangle(x * OFFSET, y * OFFSET, 4 * OFFSET, 4 * OFFSET, GREEN);
-  }
   }
 }
 
@@ -85,6 +72,7 @@ int main(void) {
   SetTargetFPS(60);
 
   Player    player;
+  Core      core(0, 0);
   double    dt  = 0;
   Inventory inv = {};
 
@@ -115,7 +103,7 @@ int main(void) {
 
     drawGrid(OFFSET, cam);
 
-    drawObjectOnGrid(Objects::Core, 0, 0);
+    core.draw();
 
     player.draw();
 
@@ -124,11 +112,10 @@ int main(void) {
     EndDrawing();
 
     player.move(dt);
+    core.collideWithPlayer(player);
 
-    if (mousePos.x >= 0 && mousePos.x < 4 && mousePos.y >= 0 && mousePos.y < 4) {
-      if (IsMouseButtonReleased(MouseButton::MOUSE_BUTTON_LEFT)) {
-        drawInv(inv);
-      }
+    if (core.isClicked()) {
+      drawInv(inv);
     }
 
     if (IsWindowResized()) {

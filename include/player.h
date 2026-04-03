@@ -11,6 +11,7 @@ public:
 
   Vector2 getPosGrid(void);
   Vector2 getPos();
+  void    setPos(Vector2 newPos);
   Vector2 getVel();
 
 private:
