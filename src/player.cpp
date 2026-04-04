@@ -1,6 +1,7 @@
 #include "player.h"
 #include "constants.h"
 #include <math.h>
+#include <print>
 #include <raylib.h>
 
 void Player::move(double dt) {
@@ -64,4 +65,20 @@ Vector2 Player::getVel() {
 
 void Player::draw() {
   DrawRectangle(pos.x, pos.y, OFFSET, OFFSET, BLACK);
+}
+
+Inventory Player::getInv() {
+  return inv;
+}
+
+void Player::setInv(Inventory i) {
+  inv = i;
+}
+
+void Player::drawInv() {
+  for (const Slot& slot : inv.items) {
+    std::print("{} x{},", (int)slot.item, slot.ammount);
+  }
+
+  std::print("\n");
 }

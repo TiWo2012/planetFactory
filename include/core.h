@@ -16,10 +16,13 @@ public:
   Core& operator=(const Core&) = default;
   ~Core()                      = default;
 
-  void draw();
+  void draw() override;
+  void update(Player& p, Camera2D cam) override;
 
   Vector2 getCorePos() const;
   Vector2 getCoreSize() const;
+
+  ObjectType getType() const override;
 
   void collideWithPlayer(Player& player);
 

@@ -1,22 +1,14 @@
 #include "constants.h"
 #include "core.h"
+#include "object.h"
 #include "player.h"
-#include <array>
+#include <cstddef>
+#include <cstdint>
 #include <format>
 #include <math.h>
-#include <print>
+#include <memory>
 #include <raylib.h>
-
-enum class Items { Air = 0, Belt, Miner };
-
-struct Slot {
-  Items item;
-  int   ammount;
-};
-
-struct Inventory {
-  std::array<Slot, 64> items;
-};
+#include <unordered_map>
 
 void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();
@@ -40,30 +32,7 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
-void drawInv(const Inventory& inv) {
-  for (const Slot& slot : inv.items) {
-    std::print("{} x{},", (int)slot.item, slot.ammount);
-  }
-
-  std::print("\n");
-}
-
-Vector2 getMousePosGrid(Camera2D cam) {
-  Vector2 mouseScreen = GetMousePosition();
-  Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);
-
-  Vector2 out = {0, 0};
-
-  if (mouseWorld.x >= 0 && mouseWorld.y >= 0) {
-    out.x = std::floor(mouseWorld.x / OFFSET);
-    out.y = std::floor(mouseWorld.y / OFFSET);
-  } else {
-    out.x = std::ceil(mouseWorld.x / OFFSET);
-    out.y = std::ceil(mouseWorld.y / OFFSET);
-  }
-
-  return out;
-}
+void drawInv(const Inventory& inv) {}
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -72,11 +41,14 @@ int main(void) {
   SetTargetFPS(60);
 
   Player    player;
-  Core      core(0, 0);
   double    dt  = 0;
   Inventory inv = {};
 
-  Vector2 mousePos = {0, 0};
+  std::unordered_map<std::uint64_t, std::unique_ptr<Object>> objects;
+  std::uint64_t                                              objectsIdx = 0;
+
+  objects[0] = std::make_unique<Core>(0, 0);
+  objectsIdx = 1;
 
   Camera2D cam = {};
   cam.target   = player.getPos();
@@ -86,7 +58,6 @@ int main(void) {
   while (!WindowShouldClose()) {
     cam.target = player.getPos();
     dt         = GetFrameTime();
-    mousePos   = getMousePosGrid(cam);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -103,7 +74,9 @@ int main(void) {
 
     drawGrid(OFFSET, cam);
 
-    core.draw();
+    for (size_t i = 0; i < objectsIdx; i++) {
+      objects[i].get()->draw();
+    }
 
     player.draw();
 
@@ -112,10 +85,11 @@ int main(void) {
     EndDrawing();
 
     player.move(dt);
-    core.collideWithPlayer(player);
 
-    if (core.isClicked()) {
-      drawInv(inv);
+    for (size_t i = 0; i < objectsIdx; i++) {
+      auto obj = objects[i].get();
+
+      obj->update(player, cam);
     }
 
     if (IsWindowResized()) {

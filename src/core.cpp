@@ -1,14 +1,15 @@
 #include "core.h"
 #include "constants.h"
+#include "object.h"
 #include "player.h"
 #include "raylib.h"
 
-Core::Core(int x, int y) {
+Core::Core(int x, int y) : Object(ObjectType::Core) {
   pos  = {(float)x, (float)y};
   size = {4, 4};
 }
 
-Core::Core(Vector2 position) {
+Core::Core(Vector2 position) : Object(ObjectType::Core) {
   pos  = position;
   size = {4, 4};
 }
@@ -58,5 +59,17 @@ void Core::collideWithPlayer(Player& player) {
       player.setPos({playerPos.x, corePos.y - playerSize.y});
     else
       player.setPos({playerPos.x, corePos.y + coreSize.y});
+  }
+}
+
+ObjectType Core::getType() const {
+  return type;
+}
+
+void Core::update(Player& p, Camera2D cam) {
+  collideWithPlayer(p);
+
+  if (isClicked(cam)) {
+    p.drawInv();
   }
 }
