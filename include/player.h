@@ -3,7 +3,7 @@
 #include <array>
 #include <raylib.h>
 
-enum class Items { Air = 0, Belt, Miner };
+enum class Items { None = 0, Belt, Miner };
 
 struct Slot {
   Items item;

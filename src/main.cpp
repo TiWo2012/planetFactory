@@ -1,3 +1,4 @@
+#include "belt.h"
 #include "constants.h"
 #include "core.h"
 #include "object.h"
@@ -7,6 +8,7 @@
 #include <format>
 #include <math.h>
 #include <memory>
+#include <print>
 #include <raylib.h>
 #include <unordered_map>
 
@@ -32,7 +34,20 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
-void drawInv(const Inventory& inv) {}
+void place(int                                                         x,
+           int                                                         y,
+           std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& o,
+           std::uint64_t                                               idx,
+           ObjectType                                                  t) {
+  switch (t) {
+  case ObjectType::Core:
+    o[idx] = std::make_unique<Core>(x, y);
+    break;
+  case ObjectType::Belt:
+    o[idx] = std::make_unique<Belt>(x, y);
+    break;
+  }
+}
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -64,6 +79,7 @@ int main(void) {
 
     DrawFPS(10, 10);
 
+    // display the position of the player (in grid coordinates)
     DrawText(std::format("{}, {}", player.getPosGrid().x, player.getPosGrid().y).c_str(),
              10,
              25,
@@ -74,6 +90,7 @@ int main(void) {
 
     drawGrid(OFFSET, cam);
 
+    // draw all objects
     for (size_t i = 0; i < objectsIdx; i++) {
       objects[i].get()->draw();
     }
@@ -86,12 +103,24 @@ int main(void) {
 
     player.move(dt);
 
-    for (size_t i = 0; i < objectsIdx; i++) {
-      auto obj = objects[i].get();
-
-      obj->update(player, cam);
+    // handle place logic
+    if (IsKeyPressed(KEY_ONE)) {
+      Vector2 gridPos = player.getPosGrid();
+      place((int)gridPos.x, (int)gridPos.y, objects, objectsIdx, ObjectType::Core);
+      objectsIdx++;
     }
 
+    if (IsKeyPressed(KEY_TWO)) {
+      Vector2 gridPos = player.getPosGrid();
+      place((int)gridPos.x, (int)gridPos.y, objects, objectsIdx, ObjectType::Belt);
+      objectsIdx++;
+    }
+
+    for (size_t i = 0; i < objectsIdx; i++) {
+      objects[i].get()->update(player, cam);
+    }
+
+    // handle resize logic
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
     }

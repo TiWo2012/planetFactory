@@ -62,10 +62,6 @@ void Core::collideWithPlayer(Player& player) {
   }
 }
 
-ObjectType Core::getType() const {
-  return type;
-}
-
 void Core::update(Player& p, Camera2D cam) {
   collideWithPlayer(p);
 

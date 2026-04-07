@@ -24,13 +24,14 @@ public:
   bool isHovered(Camera2D cam);
   bool isColiding(Vector2 otherPos, Vector2 otherSize);
 
-  Vector2            getPos() const;
-  Vector2            getSize() const;
-  float              getX() const;
-  float              getY() const;
-  float              getWidth() const;
-  float              getHeight() const;
-  virtual ObjectType getType() const = 0;
+  Vector2    getPos() const;
+  Vector2    getSize() const;
+  float      getX() const;
+  float      getY() const;
+  float      getWidth() const;
+  float      getHeight() const;
+  ObjectType getType() const;
+  void       loadTexture(const char* path);
 
 protected:
   Vector2    pos     = {};

@@ -72,3 +72,11 @@ bool Object::isColiding(Vector2 otherPos, Vector2 otherSize) {
   return pos.x < otherPos.x + otherSize.x && pos.x + size.x > otherPos.x
          && pos.y < otherPos.y + otherSize.y && pos.y + size.y > otherPos.y;
 }
+
+void Object::loadTexture(const char* path) {
+  LoadTexture(path);
+}
+
+ObjectType Object::getType() const {
+  return type;
+}
