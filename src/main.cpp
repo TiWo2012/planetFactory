@@ -16,8 +16,8 @@ void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();
   float screenH = GetScreenHeight();
 
-  Vector2 topLeft     = GetScreenToWorld2D((Vector2){0, 0}, cam);
-  Vector2 bottomRight = GetScreenToWorld2D((Vector2){screenW, screenH}, cam);
+  Vector2 topLeft     = GetScreenToWorld2D({0, 0}, cam);
+  Vector2 bottomRight = GetScreenToWorld2D({screenW, screenH}, cam);
 
   int startX = (int)floorf(topLeft.x / spacing) * spacing;
   int endX   = (int)floorf(bottomRight.x / spacing + 1) * spacing;
@@ -55,9 +55,8 @@ int main(void) {
 
   SetTargetFPS(60);
 
-  Player    player;
-  double    dt  = 0;
-  Inventory inv = {};
+  Player player;
+  double dt = 0;
 
   std::unordered_map<std::uint64_t, std::unique_ptr<Object>> objects;
   std::uint64_t                                              objectsIdx = 0;

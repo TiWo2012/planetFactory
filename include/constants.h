@@ -4,3 +4,4 @@
 #define SCREEN_HEIGHT 600
 #define PLAYER_SPEED 200
 #define OFFSET 32
+#define BELT_MOVE_SPEED 100

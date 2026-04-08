@@ -2,7 +2,6 @@
 #include "constants.h"
 #include "raylib.h"
 #include <cmath>
-#include <print>
 
 Object::Object(ObjectType t) : type(t) {}
 Object::~Object() = default;
@@ -79,4 +78,22 @@ void Object::loadTexture(const char* path) {
 
 ObjectType Object::getType() const {
   return type;
+}
+
+bool Object::isObjectInProximity(Vector2 localPos, const Object& remoteObj, ObjectType type) {
+  auto remotePos = remoteObj.getPos();
+
+  // check if objectType is correct first
+  if (remoteObj.getType() != type)
+    return false;
+
+  // check for north, east, south and west
+  if ((localPos.x + 1 == remotePos.x && localPos.y == remotePos.y)
+      || (localPos.x - 1 == remotePos.x && localPos.y == remotePos.y)
+      || (localPos.x == remotePos.x && localPos.y + 1 == remotePos.y)
+      || (localPos.x == remotePos.x && localPos.y - 1 == remotePos.y)) {
+    return true;
+  }
+
+  return false;
 }

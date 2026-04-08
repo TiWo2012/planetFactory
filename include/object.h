@@ -24,6 +24,8 @@ public:
   bool isHovered(Camera2D cam);
   bool isColiding(Vector2 otherPos, Vector2 otherSize);
 
+  bool isObjectInProximity(Vector2 localPos, const Object& remoteObj, ObjectType type);
+
   Vector2    getPos() const;
   Vector2    getSize() const;
   float      getX() const;
