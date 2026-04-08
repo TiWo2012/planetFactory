@@ -2,26 +2,35 @@
 #include "constants.h"
 #include "object.h"
 #include "raylib.h"
+#include "utlis.h"
 
-Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(BeltDirection::Up) {
+Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
   pos  = {(float)x, (float)y};
   size = {1, 1};
 }
 
 Belt::Belt(float x, float y, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj)
-    : Object(ObjectType::Belt), direction(BeltDirection::Up), objectsMap(&obj) {
+    : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   pos  = {x, y};
   size = {1, 1};
 }
 
 Belt::Belt(Vector2 pos, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj)
-    : Object(ObjectType::Belt), direction(BeltDirection::Up), objectsMap(&obj) {
+    : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   this->pos = pos;
   size      = {1, 1};
 }
 
+Belt::Belt(int x, int y, Direction dir) : Object(ObjectType::Belt), direction(dir) {
+  pos       = {(float)x, (float)y};
+  size      = {1, 1};
+  direction = dir;
+}
+
 void Belt::draw() {
   DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, ORANGE);
+
+  drawArrow(pos, direction, BLACK);
 }
 
 void Belt::update(Player& p, Camera2D cam) {
@@ -39,13 +48,13 @@ void Belt::update(Player& p, Camera2D cam) {
   if (isColiding(p.getPos(), {1, 1})) {
     // Push player in belt direction (gradual movement, not instant teleport)
     const float beltSpeed = (BELT_MOVE_SPEED / OFFSET) * 0.02f;
-    if (direction == BeltDirection::Up) {
+    if (direction == Direction::Up) {
       p.setVel({p.getVel().x, -beltSpeed});
-    } else if (direction == BeltDirection::Down) {
+    } else if (direction == Direction::Down) {
       p.setVel({p.getVel().x, beltSpeed});
-    } else if (direction == BeltDirection::Left) {
+    } else if (direction == Direction::Left) {
       p.setVel({-beltSpeed, p.getVel().y});
-    } else if (direction == BeltDirection::Right) {
+    } else if (direction == Direction::Right) {
       p.setVel({beltSpeed, p.getVel().y});
     }
   }
@@ -64,16 +73,16 @@ Belt* Belt::findNextBelt(const std::unordered_map<std::uint64_t, std::unique_ptr
   // Calculate expected position of next belt based on direction
   Vector2 nextPos = pos;
   switch (direction) {
-  case BeltDirection::Up:
+  case Direction::Up:
     nextPos.y -= 1;
     break;
-  case BeltDirection::Down:
+  case Direction::Down:
     nextPos.y += 1;
     break;
-  case BeltDirection::Left:
+  case Direction::Left:
     nextPos.x -= 1;
     break;
-  case BeltDirection::Right:
+  case Direction::Right:
     nextPos.x += 1;
     break;
   }
@@ -89,11 +98,11 @@ Belt* Belt::findNextBelt(const std::unordered_map<std::uint64_t, std::unique_ptr
   return nullptr;
 }
 
-void Belt::setDirection(BeltDirection dir) {
+void Belt::setDirection(Direction dir) {
   direction = dir;
 }
 
-BeltDirection Belt::getDirection() const {
+Direction Belt::getDirection() const {
   return direction;
 }
 

@@ -6,13 +6,14 @@
 #include <memory>
 #include <unordered_map>
 
-enum class BeltDirection { Left, Right, Up, Down };
+enum class Direction { Left, Right, Up, Down };
 
 class Belt : public Object {
 public:
   Belt(int x, int y);
   Belt(float x, float y, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj);
   Belt(Vector2 pos, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj);
+  Belt(int x, int y, Direction dir);
   Belt()                       = default;
   Belt(Belt&&)                 = default;
   Belt(const Belt&)            = default;
@@ -20,14 +21,14 @@ public:
   Belt& operator=(const Belt&) = default;
   ~Belt()                      = default;
 
-  void setObjectsMap(const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj);
-  void setDirection(BeltDirection dir);
-  BeltDirection getDirection() const;
-  void          setContent(Items item);
-  Items         getContent() const;
-  void          setNext(Belt* belt);
-  Belt*         getNext() const;
-  bool          hasNext() const;
+  void      setObjectsMap(const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj);
+  void      setDirection(Direction dir);
+  Direction getDirection() const;
+  void      setContent(Items item);
+  Items     getContent() const;
+  void      setNext(Belt* belt);
+  Belt*     getNext() const;
+  bool      hasNext() const;
 
   void draw() override;
   void update(Player& p, Camera2D cam) override;
@@ -39,6 +40,6 @@ private:
 private:
   Items                                                             content = Items::None;
   Belt*                                                             next    = nullptr;
-  BeltDirection                                                     direction;
+  Direction                                                         direction;
   const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>* objectsMap = nullptr;
 };

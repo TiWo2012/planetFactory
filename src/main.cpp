@@ -38,13 +38,14 @@ void place(int                                                         x,
            int                                                         y,
            std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& o,
            std::uint64_t                                               idx,
-           ObjectType                                                  t) {
+           ObjectType                                                  t,
+           Direction                                                   dir) {
   switch (t) {
   case ObjectType::Core:
     o[idx] = std::make_unique<Core>(x, y);
     break;
   case ObjectType::Belt:
-    o[idx] = std::make_unique<Belt>(x, y);
+    o[idx] = std::make_unique<Belt>(x, y, dir);
     break;
   }
 }
@@ -55,16 +56,17 @@ Vector2 convertPosToGrid(Vector2 pos) {
 
 void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
                  std::uint64_t&                                              objectsIdx,
-                 Vector2                                                     mousePos) {
+                 Vector2                                                     mousePos,
+                 Direction                                                   placeDir) {
   Vector2 gridPos = convertPosToGrid(mousePos);
 
   if (IsKeyPressed(KEY_ONE)) {
-    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Core);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Core, placeDir);
     objectsIdx++;
   }
 
   if (IsKeyPressed(KEY_TWO)) {
-    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt, placeDir);
     objectsIdx++;
   }
 }
@@ -90,7 +92,8 @@ int main(void) {
   cam.offset              = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom                = 1.0f;
 
-  Vector2 mousePos;
+  Vector2   mousePos;
+  Direction placeDir = Direction::Up;
 
   while (!WindowShouldClose()) {
     cam.target = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
@@ -127,7 +130,7 @@ int main(void) {
     player.move(dt);
 
     // handle place logic
-    placeObject(objects, objectsIdx, mousePos);
+    placeObject(objects, objectsIdx, mousePos, placeDir);
 
     for (size_t i = 0; i < objectsIdx; i++) {
       objects[i].get()->update(player, cam);

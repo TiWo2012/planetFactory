@@ -16,6 +16,7 @@ set(SOURCES
     src/object.cpp
     src/core.cpp
     src/belt.cpp
+    src/utils.cpp
 )
 
 add_executable(planetFactory ${SOURCES})
