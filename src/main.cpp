@@ -57,7 +57,7 @@ Vector2 convertPosToGrid(Vector2 pos) {
 void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
                  std::uint64_t&                                              objectsIdx,
                  Vector2                                                     mousePos,
-                 Direction                                                   placeDir) {
+                 Direction&                                                  placeDir) {
   Vector2 gridPos = convertPosToGrid(mousePos);
 
   if (IsKeyPressed(KEY_ONE)) {
@@ -68,6 +68,23 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
   if (IsKeyPressed(KEY_TWO)) {
     place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt, placeDir);
     objectsIdx++;
+  }
+
+  if (IsKeyPressed(KEY_R)) {
+    switch (placeDir) {
+    case Direction::Up:
+      placeDir = Direction::Right;
+      break;
+    case Direction::Right:
+      placeDir = Direction::Down;
+      break;
+    case Direction::Down:
+      placeDir = Direction::Left;
+      break;
+    case Direction::Left:
+      placeDir = Direction::Up;
+      break;
+    }
   }
 }
 
