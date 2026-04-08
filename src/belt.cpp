@@ -36,17 +36,17 @@ void Belt::update(Player& p, Camera2D cam) {
     content = Items::None;
   }
 
-  if (isColiding(p.getPos(), {OFFSET, OFFSET})) {
+  if (isColiding(p.getPos(), {1, 1})) {
     // Push player in belt direction (gradual movement, not instant teleport)
-    const float beltSpeed = BELT_MOVE_SPEED * 0.02f;
+    const float beltSpeed = (BELT_MOVE_SPEED / OFFSET) * 0.02f;
     if (direction == BeltDirection::Up) {
-      p.setPos({p.getPos().x, p.getPos().y - beltSpeed});
+      p.setVel({p.getVel().x, -beltSpeed});
     } else if (direction == BeltDirection::Down) {
-      p.setPos({p.getPos().x, p.getPos().y + beltSpeed});
+      p.setVel({p.getVel().x, beltSpeed});
     } else if (direction == BeltDirection::Left) {
-      p.setPos({p.getPos().x - beltSpeed, p.getPos().y});
+      p.setVel({-beltSpeed, p.getVel().y});
     } else if (direction == BeltDirection::Right) {
-      p.setPos({p.getPos().x + beltSpeed, p.getPos().y});
+      p.setVel({beltSpeed, p.getVel().y});
     }
   }
 }

@@ -25,6 +25,7 @@ public:
   Vector2   getPos();
   void      setPos(Vector2 newPos);
   Vector2   getVel();
+  void      setVel(Vector2 newVel);
   Inventory getInv();
   void      setInv(Inventory i);
   void      drawInv();

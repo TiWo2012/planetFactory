@@ -23,16 +23,16 @@ void Core::draw() {
 }
 
 Vector2 Core::getCorePos() const {
-  return {pos.x * OFFSET, pos.y * OFFSET};
+  return pos;
 }
 
 Vector2 Core::getCoreSize() const {
-  return {size.x * OFFSET, size.y * OFFSET};
+  return size;
 }
 
 void Core::collideWithPlayer(Player& player) {
   Vector2 playerPos  = player.getPos();
-  Vector2 playerSize = {OFFSET, OFFSET};
+  Vector2 playerSize = {1, 1}; // Player size in grid units
   Vector2 corePos    = getCorePos();
   Vector2 coreSize   = getCoreSize();
 

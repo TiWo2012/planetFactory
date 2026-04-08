@@ -64,13 +64,14 @@ int main(void) {
   objects[0] = std::make_unique<Core>(0, 0);
   objectsIdx = 1;
 
-  Camera2D cam = {};
-  cam.target   = player.getPos();
-  cam.offset   = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
-  cam.zoom     = 1.0f;
+  Camera2D cam            = {};
+  Vector2  playerPixelPos = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
+  cam.target              = playerPixelPos;
+  cam.offset              = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
+  cam.zoom                = 1.0f;
 
   while (!WindowShouldClose()) {
-    cam.target = player.getPos();
+    cam.target = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
     dt         = GetFrameTime();
 
     BeginDrawing();
