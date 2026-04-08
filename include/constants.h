@@ -5,3 +5,4 @@
 #define PLAYER_SPEED 200
 #define OFFSET 32
 #define BELT_MOVE_SPEED 100
+#define MAX_HEALTH 100

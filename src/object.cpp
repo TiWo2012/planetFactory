@@ -30,6 +30,32 @@ float Object::getHeight() const {
   return size.y;
 }
 
+int Object::getHealth() const {
+  return health;
+}
+
+void Object::setHealth(int health) {
+  this->health = health;
+}
+
+void Object::removeHealth(int amount) {
+  health -= amount;
+  if (health < 0) {
+    health = 0;
+  }
+}
+
+void Object::addHealth(int amount) {
+  health += amount;
+  if (health > MAX_HEALTH) {
+    health = MAX_HEALTH;
+  }
+}
+
+bool Object::isDead() const {
+  return health <= 0;
+}
+
 Vector2 getMousePosGrid(Camera2D cam) {
   Vector2 mouseScreen = GetMousePosition();
   Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);

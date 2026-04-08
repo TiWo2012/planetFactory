@@ -15,10 +15,12 @@ Core::Core(Vector2 position) : Object(ObjectType::Core) {
 }
 
 void Core::draw() {
-  if (texture.id == 0) {
-    DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, GREEN);
-  } else {
-    DrawTextureV(texture, pos, WHITE);
+  if (health > 0) {
+    if (texture.id == 0) {
+      DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, GREEN);
+    } else {
+      DrawTextureV(texture, pos, WHITE);
+    }
   }
 }
 

@@ -1,6 +1,7 @@
 #include "belt.h"
 #include "constants.h"
 #include "core.h"
+#include "enemy.h"
 #include "object.h"
 #include "player.h"
 #include <cstddef>
@@ -41,11 +42,13 @@ void place(int                                                         x,
            ObjectType                                                  t,
            Direction                                                   dir) {
   switch (t) {
-  case ObjectType::Core:
-    o[idx] = std::make_unique<Core>(x, y);
-    break;
   case ObjectType::Belt:
     o[idx] = std::make_unique<Belt>(x, y, dir);
+    break;
+  case ObjectType::Enemy:
+    o[idx] = std::make_unique<Enemy>(x, y, static_cast<Core*>(o[0].get()));
+    break;
+  default:
     break;
   }
 }
@@ -61,12 +64,12 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
   Vector2 gridPos = convertPosToGrid(mousePos);
 
   if (IsKeyPressed(KEY_ONE)) {
-    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Core, placeDir);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt, placeDir);
     objectsIdx++;
   }
 
   if (IsKeyPressed(KEY_TWO)) {
-    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt, placeDir);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Enemy, placeDir);
     objectsIdx++;
   }
 
@@ -135,7 +138,7 @@ int main(void) {
 
     // draw all objects
     for (size_t i = 0; i < objectsIdx; i++) {
-      objects[i].get()->draw();
+      objects[i]->draw();
     }
 
     player.draw();
@@ -150,7 +153,7 @@ int main(void) {
     placeObject(objects, objectsIdx, mousePos, placeDir);
 
     for (size_t i = 0; i < objectsIdx; i++) {
-      objects[i].get()->update(player, cam);
+      objects[i]->update(player, cam);
     }
 
     // handle resize logic
