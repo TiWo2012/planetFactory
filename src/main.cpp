@@ -49,20 +49,22 @@ void place(int                                                         x,
   }
 }
 
-void placeObject(Player&                                                     player,
-                 std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
+Vector2 convertPosToGrid(Vector2 pos) {
+  return {pos.x / OFFSET, pos.y / OFFSET};
+}
+
+void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
                  std::uint64_t&                                              objectsIdx,
                  Vector2                                                     mousePos) {
-  int gridX = (int)(mousePos.x / OFFSET);
-  int gridY = (int)(mousePos.y / OFFSET);
+  Vector2 gridPos = convertPosToGrid(mousePos);
 
   if (IsKeyPressed(KEY_ONE)) {
-    place(gridX, gridY, objects, objectsIdx, ObjectType::Core);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Core);
     objectsIdx++;
   }
 
   if (IsKeyPressed(KEY_TWO)) {
-    place(gridX, gridY, objects, objectsIdx, ObjectType::Belt);
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Belt);
     objectsIdx++;
   }
 }
@@ -125,7 +127,7 @@ int main(void) {
     player.move(dt);
 
     // handle place logic
-    placeObject(player, objects, objectsIdx, mousePos);
+    placeObject(objects, objectsIdx, mousePos);
 
     for (size_t i = 0; i < objectsIdx; i++) {
       objects[i].get()->update(player, cam);
