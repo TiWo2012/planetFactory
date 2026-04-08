@@ -49,6 +49,24 @@ void place(int                                                         x,
   }
 }
 
+void placeObject(Player&                                                     player,
+                 std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
+                 std::uint64_t&                                              objectsIdx,
+                 Vector2                                                     mousePos) {
+  int gridX = (int)(mousePos.x / OFFSET);
+  int gridY = (int)(mousePos.y / OFFSET);
+
+  if (IsKeyPressed(KEY_ONE)) {
+    place(gridX, gridY, objects, objectsIdx, ObjectType::Core);
+    objectsIdx++;
+  }
+
+  if (IsKeyPressed(KEY_TWO)) {
+    place(gridX, gridY, objects, objectsIdx, ObjectType::Belt);
+    objectsIdx++;
+  }
+}
+
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
@@ -70,9 +88,12 @@ int main(void) {
   cam.offset              = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom                = 1.0f;
 
+  Vector2 mousePos;
+
   while (!WindowShouldClose()) {
     cam.target = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
     dt         = GetFrameTime();
+    mousePos   = GetScreenToWorld2D(GetMousePosition(), cam);
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
@@ -104,17 +125,7 @@ int main(void) {
     player.move(dt);
 
     // handle place logic
-    if (IsKeyPressed(KEY_ONE)) {
-      Vector2 gridPos = player.getPosGrid();
-      place((int)gridPos.x, (int)gridPos.y, objects, objectsIdx, ObjectType::Core);
-      objectsIdx++;
-    }
-
-    if (IsKeyPressed(KEY_TWO)) {
-      Vector2 gridPos = player.getPosGrid();
-      place((int)gridPos.x, (int)gridPos.y, objects, objectsIdx, ObjectType::Belt);
-      objectsIdx++;
-    }
+    placeObject(player, objects, objectsIdx, mousePos);
 
     for (size_t i = 0; i < objectsIdx; i++) {
       objects[i].get()->update(player, cam);
