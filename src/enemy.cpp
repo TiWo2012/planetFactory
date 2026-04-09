@@ -57,7 +57,7 @@ void Enemy::update(Player& p, Camera2D cam) {
       pos.y += enemyRadius;
     }
     // reverse velocity to bounce back
-    pos.x -= dx * 0.05f;
-    pos.y -= dy * 0.05f;
+    pos.x -= dx * 1.0f;
+    pos.y -= dy * 1.0f;
   }
 }
