@@ -21,8 +21,8 @@ void Player::move(double dt) {
     dir.x /= len;
     dir.y /= len;
 
-    vel.x += dir.x * (PLAYER_SPEED / OFFSET) * dt;
-    vel.y += dir.y * (PLAYER_SPEED / OFFSET) * dt;
+    vel.x += dir.x * (Constants::PLAYER_SPEED / Constants::OFFSET) * dt;
+    vel.y += dir.y * (Constants::PLAYER_SPEED / Constants::OFFSET) * dt;
   }
 
   pos.x += vel.x;
@@ -47,7 +47,8 @@ Vector2 Player::getPosGrid(void) {
 }
 
 Player::Player() {
-  pos = {SCREEN_WIDTH / 2.0f / OFFSET, SCREEN_HEIGHT / 2.0f / OFFSET};
+  pos = {Constants::SCREEN_WIDTH / 2.0f / Constants::OFFSET,
+         Constants::SCREEN_HEIGHT / 2.0f / Constants::OFFSET};
   vel = {0, 0};
 }
 
@@ -68,7 +69,11 @@ void Player::setVel(Vector2 newVel) {
 }
 
 void Player::draw() {
-  DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, OFFSET, OFFSET, BLACK);
+  DrawRectangle(pos.x * Constants::OFFSET,
+                pos.y * Constants::OFFSET,
+                Constants::OFFSET,
+                Constants::OFFSET,
+                BLACK);
 }
 
 Inventory Player::getInv() {

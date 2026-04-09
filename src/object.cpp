@@ -30,6 +30,32 @@ float Object::getHeight() const {
   return size.y;
 }
 
+int Object::getHealth() const {
+  return health;
+}
+
+void Object::setHealth(int health) {
+  this->health = health;
+}
+
+void Object::removeHealth(int amount) {
+  health -= amount;
+  if (health < 0) {
+    health = 0;
+  }
+}
+
+void Object::addHealth(int amount) {
+  health += amount;
+  if (health > Constants::MAX_HEALTH) {
+    health = Constants::MAX_HEALTH;
+  }
+}
+
+bool Object::isDead() const {
+  return health <= 0;
+}
+
 Vector2 getMousePosGrid(Camera2D cam) {
   Vector2 mouseScreen = GetMousePosition();
   Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);
@@ -37,11 +63,11 @@ Vector2 getMousePosGrid(Camera2D cam) {
   Vector2 out = {0, 0};
 
   if (mouseWorld.x >= 0 && mouseWorld.y >= 0) {
-    out.x = std::floor(mouseWorld.x / OFFSET);
-    out.y = std::floor(mouseWorld.y / OFFSET);
+    out.x = std::floor(mouseWorld.x / Constants::OFFSET);
+    out.y = std::floor(mouseWorld.y / Constants::OFFSET);
   } else {
-    out.x = std::ceil(mouseWorld.x / OFFSET);
-    out.y = std::ceil(mouseWorld.y / OFFSET);
+    out.x = std::ceil(mouseWorld.x / Constants::OFFSET);
+    out.y = std::ceil(mouseWorld.y / Constants::OFFSET);
   }
 
   return out;

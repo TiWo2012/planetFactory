@@ -6,6 +6,8 @@
 enum class ObjectType {
   Core,
   Belt,
+  Enemy,
+  Turret,
 };
 
 class Object {
@@ -34,10 +36,16 @@ public:
   float      getHeight() const;
   ObjectType getType() const;
   void       loadTexture(const char* path);
+  int        getHealth() const;
+  void       setHealth(int health);
+  void       removeHealth(int amount);
+  void       addHealth(int amount);
+  bool       isDead() const;
 
 protected:
   Vector2    pos     = {};
   Vector2    size    = {};
   Texture2D  texture = {};
   ObjectType type;
+  int        health = 100;
 };

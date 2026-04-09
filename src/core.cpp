@@ -1,8 +1,11 @@
 #include "core.h"
 #include "constants.h"
+#include "messages.h"
 #include "object.h"
 #include "player.h"
 #include "raylib.h"
+
+extern Messages messages;
 
 Core::Core(int x, int y) : Object(ObjectType::Core) {
   pos  = {(float)x, (float)y};
@@ -15,10 +18,16 @@ Core::Core(Vector2 position) : Object(ObjectType::Core) {
 }
 
 void Core::draw() {
-  if (texture.id == 0) {
-    DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, GREEN);
-  } else {
-    DrawTextureV(texture, pos, WHITE);
+  if (health > 0) {
+    if (texture.id == 0) {
+      DrawRectangle(pos.x * Constants::OFFSET,
+                    pos.y * Constants::OFFSET,
+                    size.x * Constants::OFFSET,
+                    size.y * Constants::OFFSET,
+                    GREEN);
+    } else {
+      DrawTextureV(texture, pos, WHITE);
+    }
   }
 }
 
@@ -64,6 +73,10 @@ void Core::collideWithPlayer(Player& player) {
 
 void Core::update(Player& p, Camera2D cam) {
   collideWithPlayer(p);
+
+  if (health <= 0) {
+    messages.setMessage(MessageType::GameOver);
+  }
 
   if (isClicked(cam)) {
     p.drawInv();

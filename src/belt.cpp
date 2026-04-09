@@ -28,7 +28,11 @@ Belt::Belt(int x, int y, Direction dir) : Object(ObjectType::Belt), direction(di
 }
 
 void Belt::draw() {
-  DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, ORANGE);
+  DrawRectangle(pos.x * Constants::OFFSET,
+                pos.y * Constants::OFFSET,
+                size.x * Constants::OFFSET,
+                size.y * Constants::OFFSET,
+                ORANGE);
 
   drawArrow(pos, direction, BLACK);
 }
@@ -47,7 +51,7 @@ void Belt::update(Player& p, Camera2D cam) {
 
   if (isColiding(p.getPos(), {1, 1})) {
     // Push player in belt direction (gradual movement, not instant teleport)
-    const float beltSpeed = (BELT_MOVE_SPEED / OFFSET) * 0.02f;
+    const float beltSpeed = (Constants::BELT_MOVE_SPEED / Constants::OFFSET) * 0.02f;
     if (direction == Direction::Up) {
       p.setVel({p.getVel().x, -beltSpeed});
     } else if (direction == Direction::Down) {
