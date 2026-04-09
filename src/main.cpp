@@ -204,5 +204,6 @@ int main(void) {
   }
 
   CloseWindow();
+  
   return 0;
 }
