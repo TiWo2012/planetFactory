@@ -12,7 +12,10 @@ Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(cor
 Enemy::~Enemy() = default;
 
 void Enemy::draw() {
-  DrawCircleV({pos.x * OFFSET - OFFSET / 2, pos.y * OFFSET - OFFSET / 2}, OFFSET / 2, RED);
+  DrawCircleV({pos.x * Constants::OFFSET - Constants::OFFSET / 2,
+               pos.y * Constants::OFFSET - Constants::OFFSET / 2},
+              Constants::OFFSET / 2,
+              RED);
 }
 
 void Enemy::update(Player& p, Camera2D cam) {

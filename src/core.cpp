@@ -17,7 +17,11 @@ Core::Core(Vector2 position) : Object(ObjectType::Core) {
 void Core::draw() {
   if (health > 0) {
     if (texture.id == 0) {
-      DrawRectangle(pos.x * OFFSET, pos.y * OFFSET, size.x * OFFSET, size.y * OFFSET, GREEN);
+      DrawRectangle(pos.x * Constants::OFFSET,
+                    pos.y * Constants::OFFSET,
+                    size.x * Constants::OFFSET,
+                    size.y * Constants::OFFSET,
+                    GREEN);
     } else {
       DrawTextureV(texture, pos, WHITE);
     }

@@ -47,8 +47,8 @@ void Object::removeHealth(int amount) {
 
 void Object::addHealth(int amount) {
   health += amount;
-  if (health > MAX_HEALTH) {
-    health = MAX_HEALTH;
+  if (health > Constants::MAX_HEALTH) {
+    health = Constants::MAX_HEALTH;
   }
 }
 
@@ -63,11 +63,11 @@ Vector2 getMousePosGrid(Camera2D cam) {
   Vector2 out = {0, 0};
 
   if (mouseWorld.x >= 0 && mouseWorld.y >= 0) {
-    out.x = std::floor(mouseWorld.x / OFFSET);
-    out.y = std::floor(mouseWorld.y / OFFSET);
+    out.x = std::floor(mouseWorld.x / Constants::OFFSET);
+    out.y = std::floor(mouseWorld.y / Constants::OFFSET);
   } else {
-    out.x = std::ceil(mouseWorld.x / OFFSET);
-    out.y = std::ceil(mouseWorld.y / OFFSET);
+    out.x = std::ceil(mouseWorld.x / Constants::OFFSET);
+    out.y = std::ceil(mouseWorld.y / Constants::OFFSET);
   }
 
   return out;

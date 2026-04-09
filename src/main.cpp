@@ -54,7 +54,7 @@ void place(int                                                         x,
 }
 
 Vector2 convertPosToGrid(Vector2 pos) {
-  return {pos.x / OFFSET, pos.y / OFFSET};
+  return {pos.x / Constants::OFFSET, pos.y / Constants::OFFSET};
 }
 
 void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
@@ -93,7 +93,9 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, std::format("Planet Factory - dev(V{})", VERSION);
+  InitWindow(Constants::SCREEN_WIDTH,
+             Constants::SCREEN_HEIGHT,
+             std::format("Planet Factory - dev(V{})", Constants::VERSION).c_str());
 
   SetTargetFPS(60);
 
@@ -107,7 +109,8 @@ int main(void) {
   objectsIdx = 1;
 
   Camera2D cam            = {};
-  Vector2  playerPixelPos = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
+  Vector2  playerPixelPos = {player.getPos().x * Constants::OFFSET,
+                             player.getPos().y * Constants::OFFSET};
   cam.target              = playerPixelPos;
   cam.offset              = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
   cam.zoom                = 1.0f;
@@ -116,7 +119,7 @@ int main(void) {
   Direction placeDir = Direction::Up;
 
   while (!WindowShouldClose()) {
-    cam.target = {player.getPos().x * OFFSET, player.getPos().y * OFFSET};
+    cam.target = {player.getPos().x * Constants::OFFSET, player.getPos().y * Constants::OFFSET};
     dt         = GetFrameTime();
     mousePos   = GetScreenToWorld2D(GetMousePosition(), cam);
 
@@ -134,7 +137,7 @@ int main(void) {
 
     BeginMode2D(cam);
 
-    drawGrid(OFFSET, cam);
+    drawGrid(Constants::OFFSET, cam);
 
     // draw all objects
     for (size_t i = 0; i < objectsIdx; i++) {
