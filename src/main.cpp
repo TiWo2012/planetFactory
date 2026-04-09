@@ -174,6 +174,10 @@ int main(void) {
       messages.setMessage(MessageType::None);
       break;
     }
+    if (msg == MessageType::None) {
+      // do nothing
+      ;
+    }
   }
 
   CloseWindow();

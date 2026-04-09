@@ -45,7 +45,6 @@ void Enemy::update(Player& p, Camera2D cam) {
     // damage the core
     if (core) {
       core->removeHealth(12);
-      messages.setMessage(MessageType::GameOver);
     }
     // bounce back - push enemy outside collision and reverse direction
     float dist    = sqrt(distSquared);

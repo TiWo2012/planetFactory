@@ -1,8 +1,11 @@
 #include "core.h"
 #include "constants.h"
+#include "messages.h"
 #include "object.h"
 #include "player.h"
 #include "raylib.h"
+
+extern Messages messages;
 
 Core::Core(int x, int y) : Object(ObjectType::Core) {
   pos  = {(float)x, (float)y};
@@ -70,6 +73,10 @@ void Core::collideWithPlayer(Player& player) {
 
 void Core::update(Player& p, Camera2D cam) {
   collideWithPlayer(p);
+
+  if (health <= 0) {
+    messages.setMessage(MessageType::GameOver);
+  }
 
   if (isClicked(cam)) {
     p.drawInv();
