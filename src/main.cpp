@@ -14,6 +14,7 @@
 #include <print>
 #include <raylib.h>
 #include <unordered_map>
+#include <vector>
 
 Messages messages;
 
@@ -152,8 +153,9 @@ int main(void) {
     drawGrid(Constants::OFFSET, cam);
 
     // draw all objects
-    for (size_t i = 0; i < objectsIdx; i++) {
-      objects[i]->draw();
+    for (auto& [id, obj] : objects) {
+      if (obj)
+        obj->draw();
     }
 
     player.draw();
@@ -167,8 +169,20 @@ int main(void) {
     // handle place logic
     placeObject(objects, objectsIdx, mousePos, placeDir);
 
-    for (size_t i = 0; i < objectsIdx; i++) {
-      objects[i]->update(player, cam);
+    for (auto& [id, obj] : objects) {
+      if (obj)
+        obj->update(player, cam);
+    }
+
+    // cleanup dead enemies
+    std::vector<std::uint64_t> deadEnemies;
+    for (auto& [id, obj] : objects) {
+      if (obj && obj->getType() == ObjectType::Enemy && obj->isDead()) {
+        deadEnemies.push_back(id);
+      }
+    }
+    for (auto id : deadEnemies) {
+      objects.erase(id);
     }
 
     // handle resize logic

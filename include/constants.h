@@ -9,5 +9,5 @@ constexpr float BELT_MOVE_SPEED = 100.0f;
 constexpr int   MAX_HEALTH      = 100;
 constexpr char  VERSION[]       = "0.2.0";
 constexpr int   TURRET_RANGE    = 5;
-constexpr int   TURRET_DAMAGE   = 10;
+constexpr int   TURRET_DAMAGE   = 100;
 } // namespace Constants

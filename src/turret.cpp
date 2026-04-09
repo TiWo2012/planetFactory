@@ -38,7 +38,7 @@ void Turret::update(Player& p, Camera2D cam) {
   }
 
   // if enemy is in range, shoot it.
-  if (closestDistance <= range * Constants::OFFSET) {
+  if (closestEnemy && closestDistance <= range) {
     closestEnemy->removeHealth(Constants::TURRET_DAMAGE);
   }
 }
