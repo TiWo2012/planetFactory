@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "core.h"
 #include "enemy.h"
+#include "messages.h"
 #include "object.h"
 #include "player.h"
 #include <cstddef>
@@ -12,6 +13,8 @@
 #include <print>
 #include <raylib.h>
 #include <unordered_map>
+
+Messages messages;
 
 void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();
@@ -162,6 +165,14 @@ int main(void) {
     // handle resize logic
     if (IsWindowResized()) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
+    }
+
+    // handle messages
+    auto msg = messages.getMessage();
+    if (msg == MessageType::GameOver) {
+      // TODO: show game over screen
+      messages.setMessage(MessageType::None);
+      break;
     }
   }
 

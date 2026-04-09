@@ -1,9 +1,12 @@
 #include "enemy.h"
 #include "constants.h"
+#include "messages.h"
 #include "player.h"
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>
+
+extern Messages messages;
 
 Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(core) {
   pos = {x, y};
@@ -42,6 +45,7 @@ void Enemy::update(Player& p, Camera2D cam) {
     // damage the core
     if (core) {
       core->removeHealth(12);
+      messages.setMessage(MessageType::GameOver);
     }
     // bounce back - push enemy outside collision and reverse direction
     float dist    = sqrt(distSquared);

@@ -18,6 +18,7 @@ set(SOURCES
     src/belt.cpp
     src/utils.cpp
     src/enemy.cpp
+    src/messages.cpp
 )
 
 add_executable(planetFactory ${SOURCES})
