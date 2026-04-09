@@ -5,6 +5,7 @@
 #include "messages.h"
 #include "object.h"
 #include "player.h"
+#include "turret.h"
 #include <cstddef>
 #include <cstdint>
 #include <format>
@@ -51,6 +52,9 @@ void place(int                                                         x,
   case ObjectType::Enemy:
     o[idx] = std::make_unique<Enemy>(x, y, static_cast<Core*>(o[0].get()));
     break;
+  case ObjectType::Turret:
+    o[idx] = std::make_unique<Turret>(x, y, &o);
+    break;
   default:
     break;
   }
@@ -73,6 +77,11 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
 
   if (IsKeyPressed(KEY_TWO)) {
     place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Enemy, placeDir);
+    objectsIdx++;
+  }
+
+  if (IsKeyPressed(KEY_THREE)) {
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Turret, placeDir);
     objectsIdx++;
   }
 

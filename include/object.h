@@ -7,6 +7,7 @@ enum class ObjectType {
   Core,
   Belt,
   Enemy,
+  Turret,
 };
 
 class Object {
