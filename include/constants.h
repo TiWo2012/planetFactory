@@ -6,3 +6,4 @@
 #define OFFSET 32
 #define BELT_MOVE_SPEED 100
 #define MAX_HEALTH 100
+#define VERSION "0.2.0"
