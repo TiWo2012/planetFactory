@@ -108,7 +108,7 @@ int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(Constants::SCREEN_WIDTH,
              Constants::SCREEN_HEIGHT,
-             std::format("Planet Factory - dev(V{})", Constants::VERSION).c_str());
+             std::format("Planet Factory - Release(V{})", Constants::VERSION).c_str());
 
   SetTargetFPS(60);
 
