@@ -93,7 +93,7 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "planetFactory");
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, std::format("Planet Factory - dev(V{})", VERSION);
 
   SetTargetFPS(60);
 
