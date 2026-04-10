@@ -9,10 +9,24 @@ Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
   size = {1, 1};
 }
 
+Belt::Belt(int x, int y, const char* texturePath)
+    : Object(ObjectType::Belt), direction(Direction::Up) {
+  pos  = {(float)x, (float)y};
+  size = {1, 1};
+  loadTexture(texturePath);
+}
+
 Belt::Belt(float x, float y, const ObjectMap& obj)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   pos  = {x, y};
   size = {1, 1};
+}
+
+Belt::Belt(float x, float y, const ObjectMap& obj, const char* texturePath)
+    : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
+  pos  = {x, y};
+  size = {1, 1};
+  loadTexture(texturePath);
 }
 
 Belt::Belt(Vector2 pos, const ObjectMap& obj)
@@ -21,20 +35,38 @@ Belt::Belt(Vector2 pos, const ObjectMap& obj)
   size      = {1, 1};
 }
 
+Belt::Belt(Vector2 pos, const ObjectMap& obj, const char* texturePath)
+    : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
+  this->pos = pos;
+  size      = {1, 1};
+  loadTexture(texturePath);
+}
+
 Belt::Belt(int x, int y, Direction dir) : Object(ObjectType::Belt), direction(dir) {
   pos       = {(float)x, (float)y};
   size      = {1, 1};
   direction = dir;
 }
 
-void Belt::draw() {
-  DrawRectangle(pos.x * Constants::OFFSET,
-                pos.y * Constants::OFFSET,
-                size.x * Constants::OFFSET,
-                size.y * Constants::OFFSET,
-                ORANGE);
+Belt::Belt(int x, int y, Direction dir, const char* texturePath)
+    : Object(ObjectType::Belt), direction(dir) {
+  pos       = {(float)x, (float)y};
+  size      = {1, 1};
+  direction = dir;
+  loadTexture(texturePath);
+}
 
-  drawArrow(pos, direction, BLACK);
+void Belt::draw() {
+  if (texture.id != 0) {
+    DrawTextureV(texture, pos, WHITE);
+  } else {
+    DrawRectangle(pos.x * Constants::OFFSET,
+                  pos.y * Constants::OFFSET,
+                  size.x * Constants::OFFSET,
+                  size.y * Constants::OFFSET,
+                  ORANGE);
+    drawArrow(pos, direction, BLACK);
+  }
 }
 
 void Belt::update(Player& p, Camera2D cam) {

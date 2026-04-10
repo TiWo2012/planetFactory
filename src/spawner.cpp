@@ -10,6 +10,13 @@ Spawner::Spawner(int x, int y, ObjectMap& objectMap) : Object(ObjectType::Spawne
   this->objectMap = &objectMap;
 }
 
+Spawner::Spawner(int x, int y, ObjectMap& objectMap, const char* texturePath)
+    : Object(ObjectType::Spawner) {
+  pos             = Vector2{(float)x, (float)y};
+  this->objectMap = &objectMap;
+  loadTexture(texturePath);
+}
+
 void Spawner::update(Player& p, Camera2D cam) {
   spawnTimer += GetFrameTime();
   if (spawnTimer >= Constants::ENEMY_SPAWN_INTERVAL) {
@@ -26,7 +33,11 @@ void Spawner::update(Player& p, Camera2D cam) {
 }
 
 void Spawner::draw() {
-  DrawRectangleV({pos.x * Constants::OFFSET, pos.y * Constants::OFFSET},
-                 Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET},
-                 GRAY);
+  if (texture.id != 0) {
+    DrawTextureV(texture, pos, WHITE);
+  } else {
+    DrawRectangleV({pos.x * Constants::OFFSET, pos.y * Constants::OFFSET},
+                   Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET},
+                   GRAY);
+  }
 }

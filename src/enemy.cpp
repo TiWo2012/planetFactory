@@ -12,13 +12,23 @@ Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(cor
   pos = {x, y};
 }
 
+Enemy::Enemy(float x, float y, Core* core, const char* texturePath)
+    : Object(ObjectType::Enemy), core(core) {
+  pos = {x, y};
+  loadTexture(texturePath);
+}
+
 Enemy::~Enemy() = default;
 
 void Enemy::draw() {
-  DrawCircleV({pos.x * Constants::OFFSET - Constants::OFFSET / 2,
-               pos.y * Constants::OFFSET - Constants::OFFSET / 2},
-              Constants::OFFSET / 2,
-              RED);
+  if (texture.id != 0) {
+    DrawTextureV(texture, pos, WHITE);
+  } else {
+    DrawCircleV({pos.x * Constants::OFFSET - Constants::OFFSET / 2,
+                 pos.y * Constants::OFFSET - Constants::OFFSET / 2},
+                Constants::OFFSET / 2,
+                RED);
+  }
 }
 
 void Enemy::update(Player& p, Camera2D cam) {

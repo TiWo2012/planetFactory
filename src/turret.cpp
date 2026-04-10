@@ -12,14 +12,26 @@ Turret::Turret(int x, int y, ObjectMap* objects) : Object(ObjectType::Turret) {
   this->objects = objects;
 }
 
+Turret::Turret(int x, int y, ObjectMap* objects, const char* texturePath)
+    : Object(ObjectType::Turret) {
+  pos           = {(float)x, (float)y};
+  size          = {1, 1};
+  this->objects = objects;
+  loadTexture(texturePath);
+}
+
 Turret::~Turret() = default;
 
 void Turret::draw() {
-  DrawRectangle(pos.x * Constants::OFFSET,
-                pos.y * Constants::OFFSET,
-                size.x * Constants::OFFSET,
-                size.y * Constants::OFFSET,
-                BLUE);
+  if (texture.id != 0) {
+    DrawTextureV(texture, pos, WHITE);
+  } else {
+    DrawRectangle(pos.x * Constants::OFFSET,
+                  pos.y * Constants::OFFSET,
+                  size.x * Constants::OFFSET,
+                  size.y * Constants::OFFSET,
+                  BLUE);
+  }
 }
 
 void Turret::update(Player& p, Camera2D cam) {

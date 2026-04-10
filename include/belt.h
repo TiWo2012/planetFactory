@@ -10,9 +10,13 @@ enum class Direction { Left, Right, Up, Down };
 class Belt : public Object {
 public:
   Belt(int x, int y);
+  Belt(int x, int y, const char* texturePath);
   Belt(float x, float y, const ObjectMap& obj);
+  Belt(float x, float y, const ObjectMap& obj, const char* texturePath);
   Belt(Vector2 pos, const ObjectMap& obj);
+  Belt(Vector2 pos, const ObjectMap& obj, const char* texturePath);
   Belt(int x, int y, Direction dir);
+  Belt(int x, int y, Direction dir, const char* texturePath);
   Belt()                       = default;
   Belt(Belt&&)                 = default;
   Belt(const Belt&)            = default;

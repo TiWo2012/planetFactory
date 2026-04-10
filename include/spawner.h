@@ -6,6 +6,7 @@
 class Spawner : public Object {
 public:
   Spawner(int x, int y, ObjectMap& objectMap);
+  Spawner(int x, int y, ObjectMap& objectMap, const char* texturePath);
   ~Spawner() = default;
 
   void update(Player& p, Camera2D cam) override;

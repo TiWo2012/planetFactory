@@ -6,6 +6,7 @@
 class Enemy : public Object {
 public:
   Enemy(float x, float y, Core* core);
+  Enemy(float x, float y, Core* core, const char* texturePath);
   ~Enemy();
 
   void draw() override;

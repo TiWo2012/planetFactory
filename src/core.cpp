@@ -12,21 +12,33 @@ Core::Core(int x, int y) : Object(ObjectType::Core) {
   size = {4, 4};
 }
 
+Core::Core(int x, int y, const char* texturePath) : Object(ObjectType::Core) {
+  pos  = {(float)x, (float)y};
+  size = {4, 4};
+  loadTexture(texturePath);
+}
+
 Core::Core(Vector2 position) : Object(ObjectType::Core) {
   pos  = position;
   size = {4, 4};
 }
 
+Core::Core(Vector2 position, const char* texturePath) : Object(ObjectType::Core) {
+  pos  = position;
+  size = {4, 4};
+  loadTexture(texturePath);
+}
+
 void Core::draw() {
   if (health > 0) {
-    if (texture.id == 0) {
+    if (texture.id != 0) {
+      DrawTextureV(texture, pos, WHITE);
+    } else {
       DrawRectangle(pos.x * Constants::OFFSET,
                     pos.y * Constants::OFFSET,
                     size.x * Constants::OFFSET,
                     size.y * Constants::OFFSET,
                     GREEN);
-    } else {
-      DrawTextureV(texture, pos, WHITE);
     }
   }
 }

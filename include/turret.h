@@ -7,6 +7,7 @@
 class Turret : public Object {
 public:
   Turret(int x, int y, ObjectMap* objects);
+  Turret(int x, int y, ObjectMap* objects, const char* texturePath);
   ~Turret();
 
   void draw() override;

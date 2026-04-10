@@ -9,7 +9,9 @@ class Core : public Object {
 public:
   Core() = default;
   Core(int x, int y);
+  Core(int x, int y, const char* texturePath);
   Core(Vector2);
+  Core(Vector2, const char* texturePath);
   Core(Core&&)                 = default;
   Core(const Core&)            = default;
   Core& operator=(Core&&)      = default;
