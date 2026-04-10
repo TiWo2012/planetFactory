@@ -21,6 +21,7 @@ set(SOURCES
     src/messages.cpp
     src/turret.cpp
     src/spawner.cpp
+    src/textureManager.cpp
 )
 
 add_executable(planetFactory ${SOURCES})

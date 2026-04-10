@@ -48,7 +48,7 @@ public:
 protected:
   Vector2    pos     = {};
   Vector2    size    = {};
-  Texture2D  texture = {};
+  Texture2D* texture = {};
   ObjectType type;
   int        health   = 100;
   float      rotation = 0.0f;

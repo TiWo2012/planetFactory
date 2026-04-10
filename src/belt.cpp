@@ -2,7 +2,10 @@
 #include "constants.h"
 #include "object.h"
 #include "raylib.h"
+#include "textureManager.h"
 #include "utils.h"
+
+extern TextureManager textureManager;
 
 Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
   pos  = {(float)x, (float)y};
@@ -12,9 +15,9 @@ Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
 
 Belt::Belt(int x, int y, const char* texturePath)
     : Object(ObjectType::Belt), direction(Direction::Up) {
-  pos  = {(float)x, (float)y};
-  size = {1, 1};
-  loadTexture(texturePath);
+  pos     = {(float)x, (float)y};
+  size    = {1, 1};
+  texture = textureManager.loadTexture(texturePath);
   updateRotationFromDirection();
 }
 
@@ -27,9 +30,9 @@ Belt::Belt(float x, float y, const ObjectMap& obj)
 
 Belt::Belt(float x, float y, const ObjectMap& obj, const char* texturePath)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
-  pos  = {x, y};
-  size = {1, 1};
-  loadTexture(texturePath);
+  pos     = {x, y};
+  size    = {1, 1};
+  texture = textureManager.loadTexture(texturePath);
   updateRotationFromDirection();
 }
 
@@ -44,7 +47,7 @@ Belt::Belt(Vector2 pos, const ObjectMap& obj, const char* texturePath)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   this->pos = pos;
   size      = {1, 1};
-  loadTexture(texturePath);
+  texture   = textureManager.loadTexture(texturePath);
   updateRotationFromDirection();
 }
 
@@ -60,18 +63,18 @@ Belt::Belt(int x, int y, Direction dir, const char* texturePath)
   pos       = {(float)x, (float)y};
   size      = {1, 1};
   direction = dir;
-  loadTexture(texturePath);
+  texture   = textureManager.loadTexture(texturePath);
   updateRotationFromDirection();
 }
 
 void Belt::draw() {
-  if (texture.id != 0) {
+  if (texture != nullptr && texture->id != 0) {
     Vector2   position = {pos.x * Constants::OFFSET + Constants::OFFSET / 2.0f,
                           pos.y * Constants::OFFSET + Constants::OFFSET / 2.0f};
-    Vector2   origin   = {texture.width / 2.0f, texture.height / 2.0f};
-    Rectangle source   = {0, 0, (float)texture.width, (float)texture.height};
-    Rectangle dest     = {position.x, position.y, (float)texture.width, (float)texture.height};
-    DrawTexturePro(texture, source, dest, origin, rotation * 90.0f, WHITE);
+    Vector2   origin   = {texture->width / 2.0f, texture->height / 2.0f};
+    Rectangle source   = {0, 0, (float)texture->width, (float)texture->height};
+    Rectangle dest     = {position.x, position.y, (float)texture->width, (float)texture->height};
+    DrawTexturePro(*texture, source, dest, origin, rotation * 90.0f, WHITE);
   } else {
     DrawRectangle(pos.x * Constants::OFFSET,
                   pos.y * Constants::OFFSET,

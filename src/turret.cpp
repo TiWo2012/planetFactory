@@ -2,9 +2,12 @@
 #include "constants.h"
 #include "enemy.h"
 #include "raylib.h"
+#include "textureManager.h"
 #include "utils.h"
 #include <cmath>
 #include <limits>
+
+extern TextureManager textureManager;
 
 Turret::Turret(int x, int y, ObjectMap* objects) : Object(ObjectType::Turret) {
   pos           = {(float)x, (float)y};
@@ -17,15 +20,15 @@ Turret::Turret(int x, int y, ObjectMap* objects, const char* texturePath)
   pos           = {(float)x, (float)y};
   size          = {1, 1};
   this->objects = objects;
-  loadTexture(texturePath);
+  texture       = textureManager.loadTexture(texturePath);
 }
 
 Turret::~Turret() = default;
 
 void Turret::draw() {
-  if (texture.id != 0) {
+  if (texture != nullptr && texture->id != 0) {
     Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
-    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
+    DrawTextureEx(*texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawRectangle(pos.x * Constants::OFFSET,
                   pos.y * Constants::OFFSET,

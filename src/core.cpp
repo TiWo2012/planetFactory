@@ -4,8 +4,10 @@
 #include "object.h"
 #include "player.h"
 #include "raylib.h"
+#include "textureManager.h"
 
-extern Messages messages;
+extern Messages       messages;
+extern TextureManager textureManager;
 
 Core::Core(int x, int y) : Object(ObjectType::Core) {
   pos  = {(float)x, (float)y};
@@ -13,10 +15,9 @@ Core::Core(int x, int y) : Object(ObjectType::Core) {
 }
 
 Core::Core(int x, int y, const char* texturePath) : Object(ObjectType::Core) {
-  pos  = {(float)x, (float)y};
-  size = {4, 4};
-
-  loadTexture(texturePath);
+  pos     = {(float)x, (float)y};
+  size    = {4, 4};
+  texture = textureManager.loadTexture(texturePath);
 }
 
 Core::Core(Vector2 position) : Object(ObjectType::Core) {
@@ -25,16 +26,16 @@ Core::Core(Vector2 position) : Object(ObjectType::Core) {
 }
 
 Core::Core(Vector2 position, const char* texturePath) : Object(ObjectType::Core) {
-  pos  = position;
-  size = {4, 4};
-  loadTexture(texturePath);
+  pos     = position;
+  size    = {4, 4};
+  texture = textureManager.loadTexture(texturePath);
 }
 
 void Core::draw() {
   if (health > 0) {
-    if (texture.id != 0) {
+    if (texture != nullptr && texture->id != 0) {
       Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
-      DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
+      DrawTextureEx(*texture, position, rotation, 1.0f, WHITE);
     } else {
       DrawRectangle(pos.x * Constants::OFFSET,
                     pos.y * Constants::OFFSET,

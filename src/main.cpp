@@ -6,6 +6,7 @@
 #include "object.h"
 #include "player.h"
 #include "spawner.h"
+#include "textureManager.h"
 #include "turret.h"
 #include "utils.h"
 #include <format>
@@ -13,7 +14,8 @@
 #include <raylib.h>
 #include <vector>
 
-Messages messages;
+Messages       messages;
+TextureManager textureManager;
 
 void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();

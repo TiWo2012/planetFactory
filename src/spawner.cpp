@@ -3,7 +3,10 @@
 #include "core.h"
 #include "enemy.h"
 #include "raylib.h"
+#include "textureManager.h"
 #include "utils.h"
+
+extern TextureManager textureManager;
 
 Spawner::Spawner(int x, int y, ObjectMap& objectMap) : Object(ObjectType::Spawner) {
   pos             = Vector2{(float)x, (float)y};
@@ -14,7 +17,7 @@ Spawner::Spawner(int x, int y, ObjectMap& objectMap, const char* texturePath)
     : Object(ObjectType::Spawner) {
   pos             = Vector2{(float)x, (float)y};
   this->objectMap = &objectMap;
-  loadTexture(texturePath);
+  texture         = textureManager.loadTexture(texturePath);
 }
 
 void Spawner::update(Player& p, Camera2D cam) {
@@ -33,9 +36,9 @@ void Spawner::update(Player& p, Camera2D cam) {
 }
 
 void Spawner::draw() {
-  if (texture.id != 0) {
+  if (texture != nullptr && texture->id != 0) {
     Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
-    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
+    DrawTextureEx(*texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawRectangleV({pos.x * Constants::OFFSET, pos.y * Constants::OFFSET},
                    Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET},

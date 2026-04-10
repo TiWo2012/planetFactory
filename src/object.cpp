@@ -1,9 +1,12 @@
 #include "object.h"
 #include "constants.h"
 #include "raylib.h"
+#include "textureManager.h"
 #include <cmath>
 
-Object::Object(ObjectType t) : type(t) {}
+extern TextureManager textureManager;
+
+Object::Object(ObjectType t) : type(t), texture(nullptr) {}
 Object::~Object() = default;
 
 Vector2 Object::getPos() const {
@@ -107,7 +110,7 @@ bool Object::isColiding(Vector2 otherPos, Vector2 otherSize) {
 }
 
 void Object::loadTexture(const char* path) {
-  texture = LoadTexture(path);
+  texture = textureManager.loadTexture(path);
 }
 
 ObjectType Object::getType() const {

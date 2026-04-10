@@ -3,10 +3,12 @@
 #include "messages.h"
 #include "player.h"
 #include "raylib.h"
+#include "textureManager.h"
 #include <algorithm>
 #include <cmath>
 
-extern Messages messages;
+extern Messages       messages;
+extern TextureManager textureManager;
 
 Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(core) {
   pos = {x, y};
@@ -14,16 +16,16 @@ Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(cor
 
 Enemy::Enemy(float x, float y, Core* core, const char* texturePath)
     : Object(ObjectType::Enemy), core(core) {
-  pos = {x, y};
-  loadTexture(texturePath);
+  pos     = {x, y};
+  texture = textureManager.loadTexture(texturePath);
 }
 
 Enemy::~Enemy() = default;
 
 void Enemy::draw() {
-  if (texture.id != 0) {
+  if (texture != nullptr && texture->id != 0) {
     Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
-    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
+    DrawTextureEx(*texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawCircleV({pos.x * Constants::OFFSET - Constants::OFFSET / 2,
                  pos.y * Constants::OFFSET - Constants::OFFSET / 2},
