@@ -22,7 +22,8 @@ Enemy::~Enemy() = default;
 
 void Enemy::draw() {
   if (texture.id != 0) {
-    DrawTextureV(texture, pos, WHITE);
+    Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
+    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawCircleV({pos.x * Constants::OFFSET - Constants::OFFSET / 2,
                  pos.y * Constants::OFFSET - Constants::OFFSET / 2},

@@ -56,6 +56,14 @@ bool Object::isDead() const {
   return health <= 0;
 }
 
+float Object::getRotation() const {
+  return rotation;
+}
+
+void Object::setRotation(float rotation) {
+  this->rotation = rotation;
+}
+
 Vector2 getMousePosGrid(Camera2D cam) {
   Vector2 mouseScreen = GetMousePosition();
   Vector2 mouseWorld  = GetScreenToWorld2D(mouseScreen, cam);
@@ -99,7 +107,7 @@ bool Object::isColiding(Vector2 otherPos, Vector2 otherSize) {
 }
 
 void Object::loadTexture(const char* path) {
-  LoadTexture(path);
+  texture = LoadTexture(path);
 }
 
 ObjectType Object::getType() const {

@@ -42,11 +42,14 @@ public:
   void       removeHealth(int amount);
   void       addHealth(int amount);
   bool       isDead() const;
+  float      getRotation() const;
+  void       setRotation(float rotation);
 
 protected:
   Vector2    pos     = {};
   Vector2    size    = {};
   Texture2D  texture = {};
   ObjectType type;
-  int        health = 100;
+  int        health   = 100;
+  float      rotation = 0.0f;
 };

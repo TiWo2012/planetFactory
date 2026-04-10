@@ -34,7 +34,8 @@ void Spawner::update(Player& p, Camera2D cam) {
 
 void Spawner::draw() {
   if (texture.id != 0) {
-    DrawTextureV(texture, pos, WHITE);
+    Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
+    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawRectangleV({pos.x * Constants::OFFSET, pos.y * Constants::OFFSET},
                    Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET},

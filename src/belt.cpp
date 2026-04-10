@@ -7,6 +7,7 @@
 Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
   pos  = {(float)x, (float)y};
   size = {1, 1};
+  updateRotationFromDirection();
 }
 
 Belt::Belt(int x, int y, const char* texturePath)
@@ -14,12 +15,14 @@ Belt::Belt(int x, int y, const char* texturePath)
   pos  = {(float)x, (float)y};
   size = {1, 1};
   loadTexture(texturePath);
+  updateRotationFromDirection();
 }
 
 Belt::Belt(float x, float y, const ObjectMap& obj)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   pos  = {x, y};
   size = {1, 1};
+  updateRotationFromDirection();
 }
 
 Belt::Belt(float x, float y, const ObjectMap& obj, const char* texturePath)
@@ -27,12 +30,14 @@ Belt::Belt(float x, float y, const ObjectMap& obj, const char* texturePath)
   pos  = {x, y};
   size = {1, 1};
   loadTexture(texturePath);
+  updateRotationFromDirection();
 }
 
 Belt::Belt(Vector2 pos, const ObjectMap& obj)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   this->pos = pos;
   size      = {1, 1};
+  updateRotationFromDirection();
 }
 
 Belt::Belt(Vector2 pos, const ObjectMap& obj, const char* texturePath)
@@ -40,12 +45,14 @@ Belt::Belt(Vector2 pos, const ObjectMap& obj, const char* texturePath)
   this->pos = pos;
   size      = {1, 1};
   loadTexture(texturePath);
+  updateRotationFromDirection();
 }
 
 Belt::Belt(int x, int y, Direction dir) : Object(ObjectType::Belt), direction(dir) {
   pos       = {(float)x, (float)y};
   size      = {1, 1};
   direction = dir;
+  updateRotationFromDirection();
 }
 
 Belt::Belt(int x, int y, Direction dir, const char* texturePath)
@@ -54,11 +61,13 @@ Belt::Belt(int x, int y, Direction dir, const char* texturePath)
   size      = {1, 1};
   direction = dir;
   loadTexture(texturePath);
+  updateRotationFromDirection();
 }
 
 void Belt::draw() {
   if (texture.id != 0) {
-    DrawTextureV(texture, pos, WHITE);
+    Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
+    DrawTextureEx(texture, position, rotation * 90.0f, 1.0f, WHITE);
   } else {
     DrawRectangle(pos.x * Constants::OFFSET,
                   pos.y * Constants::OFFSET,
@@ -134,8 +143,26 @@ Belt* Belt::findNextBelt(const ObjectMap& obj) {
   return nullptr;
 }
 
+void Belt::updateRotationFromDirection() {
+  switch (direction) {
+  case Direction::Up:
+    rotation = 0.0f;
+    break;
+  case Direction::Right:
+    rotation = 1.0f;
+    break;
+  case Direction::Down:
+    rotation = 2.0f;
+    break;
+  case Direction::Left:
+    rotation = 3.0f;
+    break;
+  }
+}
+
 void Belt::setDirection(Direction dir) {
   direction = dir;
+  updateRotationFromDirection();
 }
 
 Direction Belt::getDirection() const {

@@ -24,7 +24,8 @@ Turret::~Turret() = default;
 
 void Turret::draw() {
   if (texture.id != 0) {
-    DrawTextureV(texture, pos, WHITE);
+    Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
+    DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
   } else {
     DrawRectangle(pos.x * Constants::OFFSET,
                   pos.y * Constants::OFFSET,

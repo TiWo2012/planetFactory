@@ -39,6 +39,7 @@ public:
 
 private:
   Belt* findNextBelt(const ObjectMap& obj);
+  void  updateRotationFromDirection();
 
 private:
   Items            content = Items::None;

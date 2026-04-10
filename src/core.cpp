@@ -15,6 +15,7 @@ Core::Core(int x, int y) : Object(ObjectType::Core) {
 Core::Core(int x, int y, const char* texturePath) : Object(ObjectType::Core) {
   pos  = {(float)x, (float)y};
   size = {4, 4};
+
   loadTexture(texturePath);
 }
 
@@ -32,7 +33,8 @@ Core::Core(Vector2 position, const char* texturePath) : Object(ObjectType::Core)
 void Core::draw() {
   if (health > 0) {
     if (texture.id != 0) {
-      DrawTextureV(texture, pos, WHITE);
+      Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
+      DrawTextureEx(texture, position, rotation, 1.0f, WHITE);
     } else {
       DrawRectangle(pos.x * Constants::OFFSET,
                     pos.y * Constants::OFFSET,

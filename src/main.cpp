@@ -45,7 +45,7 @@ void place(int x, int y, ObjectMap& o, ObjectType t, Direction dir) {
   }
   switch (t) {
   case ObjectType::Belt:
-    o[idx] = std::make_unique<Belt>(x, y, dir);
+    o[idx] = std::make_unique<Belt>(x, y, dir, "assets/belt-straight.png");
     break;
   case ObjectType::Enemy:
     o[idx] = std::make_unique<Enemy>(x, y, static_cast<Core*>(o[0].get()));
@@ -115,7 +115,7 @@ int main(void) {
 
   ObjectMap objects;
 
-  objects[0] = std::make_unique<Core>(0, 0);
+  objects[0] = std::make_unique<Core>(0, 0, "assets/core.png");
 
   Camera2D cam            = {};
   Vector2  playerPixelPos = {player.getPos().x * Constants::OFFSET,
