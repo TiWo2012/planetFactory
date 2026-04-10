@@ -6,12 +6,10 @@
 #include "object.h"
 #include "player.h"
 #include "turret.h"
-#include <cstddef>
 #include <cstdint>
 #include <format>
 #include <math.h>
 #include <memory>
-#include <print>
 #include <raylib.h>
 #include <unordered_map>
 #include <vector>
@@ -204,6 +202,6 @@ int main(void) {
   }
 
   CloseWindow();
-  
+
   return 0;
 }
