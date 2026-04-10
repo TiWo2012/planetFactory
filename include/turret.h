@@ -16,5 +16,7 @@ public:
 
 private:
   std::unordered_map<std::uint64_t, std::unique_ptr<Object>>* objects;
-  int                                                         range = Constants::TURRET_RANGE;
+  int                                                         range      = Constants::TURRET_RANGE;
+  bool                                                        canShoot   = true;
+  float                                                       shootTimer = 0.0f;
 };

@@ -24,6 +24,15 @@ void Turret::draw() {
 }
 
 void Turret::update(Player& p, Camera2D cam) {
+  if (!canShoot) {
+    shootTimer += 1.0f / 60.0f; // assuming 60 FPS
+    if (shootTimer >= 1.0f / Constants::TURRET_FIRE_RATE) {
+      canShoot   = true;
+      shootTimer = 0.0f;
+    }
+    return;
+  }
+
   // get closest enemy.
   Object* closestEnemy    = nullptr;
   float   closestDistance = std::numeric_limits<float>::max();
@@ -40,5 +49,7 @@ void Turret::update(Player& p, Camera2D cam) {
   // if enemy is in range, shoot it.
   if (closestEnemy && closestDistance <= range) {
     closestEnemy->removeHealth(Constants::TURRET_DAMAGE);
+    canShoot   = false;
+    shootTimer = 0.0f;
   }
 }
