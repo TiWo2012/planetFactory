@@ -1,5 +1,6 @@
+#include "utils.h"
+#include "belt.h"
 #include "constants.h"
-#include "utlis.h"
 #include <raylib.h>
 
 void drawArrow(Vector2 pos, Direction direction, Color color) {

@@ -2,20 +2,20 @@
 #include "constants.h"
 #include "object.h"
 #include "raylib.h"
-#include "utlis.h"
+#include "utils.h"
 
 Belt::Belt(int x, int y) : Object(ObjectType::Belt), direction(Direction::Up) {
   pos  = {(float)x, (float)y};
   size = {1, 1};
 }
 
-Belt::Belt(float x, float y, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj)
+Belt::Belt(float x, float y, const ObjectMap& obj)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   pos  = {x, y};
   size = {1, 1};
 }
 
-Belt::Belt(Vector2 pos, const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj)
+Belt::Belt(Vector2 pos, const ObjectMap& obj)
     : Object(ObjectType::Belt), direction(Direction::Up), objectsMap(&obj) {
   this->pos = pos;
   size      = {1, 1};
@@ -64,16 +64,16 @@ void Belt::update(Player& p, Camera2D cam) {
   }
 }
 
-void Belt::setObjectsMap(const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj) {
+void Belt::setObjectsMap(const ObjectMap& obj) {
   objectsMap = &obj;
   updateNextBelt(obj);
 }
 
-void Belt::updateNextBelt(const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj) {
+void Belt::updateNextBelt(const ObjectMap& obj) {
   next = findNextBelt(obj);
 }
 
-Belt* Belt::findNextBelt(const std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj) {
+Belt* Belt::findNextBelt(const ObjectMap& obj) {
   // Calculate expected position of next belt based on direction
   Vector2 nextPos = pos;
   switch (direction) {

@@ -8,6 +8,7 @@ enum class ObjectType {
   Belt,
   Enemy,
   Turret,
+  Spawner,
 };
 
 class Object {
