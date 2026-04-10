@@ -66,8 +66,12 @@ Belt::Belt(int x, int y, Direction dir, const char* texturePath)
 
 void Belt::draw() {
   if (texture.id != 0) {
-    Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
-    DrawTextureEx(texture, position, rotation * 90.0f, 1.0f, WHITE);
+    Vector2   position = {pos.x * Constants::OFFSET + Constants::OFFSET / 2.0f,
+                          pos.y * Constants::OFFSET + Constants::OFFSET / 2.0f};
+    Vector2   origin   = {texture.width / 2.0f, texture.height / 2.0f};
+    Rectangle source   = {0, 0, (float)texture.width, (float)texture.height};
+    Rectangle dest     = {position.x, position.y, (float)texture.width, (float)texture.height};
+    DrawTexturePro(texture, source, dest, origin, rotation * 90.0f, WHITE);
   } else {
     DrawRectangle(pos.x * Constants::OFFSET,
                   pos.y * Constants::OFFSET,
