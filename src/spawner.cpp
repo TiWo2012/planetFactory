@@ -27,5 +27,7 @@ void Spawner::update(Player& p, Camera2D cam) {
 }
 
 void Spawner::draw() {
-  DrawRectangleV(pos, Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET}, GRAY);
+  DrawRectangleV({pos.x * Constants::OFFSET, pos.y * Constants::OFFSET},
+                 Vector2{2 * Constants::OFFSET, 2 * Constants::OFFSET},
+                 GRAY);
 }
