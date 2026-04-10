@@ -11,7 +11,6 @@ Spawner::Spawner(int x, int y, ObjectMap& objectMap) : Object(ObjectType::Spawne
 }
 
 void Spawner::update(Player& p, Camera2D cam) {
-  // TODO: Implement spawner update logic
   spawnTimer += GetFrameTime();
   if (spawnTimer >= Constants::ENEMY_SPAWN_INTERVAL) {
     spawnTimer = 0.0f;
