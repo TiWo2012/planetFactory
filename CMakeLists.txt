@@ -20,6 +20,7 @@ set(SOURCES
     src/enemy.cpp
     src/messages.cpp
     src/turret.cpp
+    src/spawner.cpp
 )
 
 add_executable(planetFactory ${SOURCES})

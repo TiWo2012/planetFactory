@@ -1,13 +1,12 @@
 #include "turret.h"
 #include "constants.h"
+#include "enemy.h"
+#include "raylib.h"
+#include "utils.h"
 #include <cmath>
-#include <cstdint>
 #include <limits>
-#include <memory>
-#include <unordered_map>
 
-Turret::Turret(int x, int y, std::unordered_map<std::uint64_t, std::unique_ptr<Object>>* objects)
-    : Object(ObjectType::Turret) {
+Turret::Turret(int x, int y, ObjectMap* objects) : Object(ObjectType::Turret) {
   pos           = {(float)x, (float)y};
   size          = {1, 1};
   this->objects = objects;

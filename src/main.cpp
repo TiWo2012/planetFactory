@@ -5,13 +5,12 @@
 #include "messages.h"
 #include "object.h"
 #include "player.h"
+#include "spawner.h"
 #include "turret.h"
-#include <cstdint>
+#include "utils.h"
 #include <format>
 #include <math.h>
-#include <memory>
 #include <raylib.h>
-#include <unordered_map>
 #include <vector>
 
 Messages messages;
@@ -38,12 +37,7 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
-void place(int                                                         x,
-           int                                                         y,
-           std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& o,
-           std::uint64_t                                               idx,
-           ObjectType                                                  t,
-           Direction                                                   dir) {
+void place(int x, int y, ObjectMap& o, std::uint64_t idx, ObjectType t, Direction dir) {
   switch (t) {
   case ObjectType::Belt:
     o[idx] = std::make_unique<Belt>(x, y, dir);
@@ -54,6 +48,9 @@ void place(int                                                         x,
   case ObjectType::Turret:
     o[idx] = std::make_unique<Turret>(x, y, &o);
     break;
+  case ObjectType::Spawner:
+    o[idx] = std::make_unique<Spawner>(x, y, o);
+    break;
   default:
     break;
   }
@@ -63,10 +60,10 @@ Vector2 convertPosToGrid(Vector2 pos) {
   return {pos.x / Constants::OFFSET, pos.y / Constants::OFFSET};
 }
 
-void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& objects,
-                 std::uint64_t&                                              objectsIdx,
-                 Vector2                                                     mousePos,
-                 Direction&                                                  placeDir) {
+void placeObject(ObjectMap&     objects,
+                 std::uint64_t& objectsIdx,
+                 Vector2        mousePos,
+                 Direction&     placeDir) {
   Vector2 gridPos = convertPosToGrid(mousePos);
 
   if (IsKeyPressed(KEY_ONE)) {
@@ -81,6 +78,11 @@ void placeObject(std::unordered_map<std::uint64_t, std::unique_ptr<Object>>& obj
 
   if (IsKeyPressed(KEY_THREE)) {
     place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Turret, placeDir);
+    objectsIdx++;
+  }
+
+  if (IsKeyPressed(KEY_FOUR)) {
+    place(gridPos.x, gridPos.y, objects, objectsIdx, ObjectType::Spawner, placeDir);
     objectsIdx++;
   }
 
@@ -113,8 +115,8 @@ int main(void) {
   Player player;
   double dt = 0;
 
-  std::unordered_map<std::uint64_t, std::unique_ptr<Object>> objects;
-  std::uint64_t                                              objectsIdx = 0;
+  ObjectMap     objects;
+  std::uint64_t objectsIdx = 0;
 
   objects[0] = std::make_unique<Core>(0, 0);
   objectsIdx = 1;
