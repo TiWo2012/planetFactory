@@ -18,7 +18,7 @@ public:
   Object(const Object&)            = default;
   Object& operator=(Object&&)      = default;
   Object& operator=(const Object&) = default;
-  ~Object();
+  virtual ~Object();
 
   virtual void draw()                          = 0;
   virtual void update(Player& p, Camera2D cam) = 0;

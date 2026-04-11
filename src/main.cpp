@@ -14,6 +14,8 @@
 #include <raylib.h>
 #include <vector>
 
+// Disclaimer: I am bad at art. don't judge my textures :)
+
 Messages       messages;
 TextureManager textureManager;
 
@@ -118,6 +120,10 @@ int main(void) {
   ObjectMap objects;
 
   objects[0] = std::make_unique<Core>(0, 0, "assets/core.png");
+  objects[1] = std::make_unique<Turret>(4, 4, &objects, "assets/turret.png");
+  objects[2] = std::make_unique<Turret>(-1, -1, &objects, "assets/turret.png");
+  objects[3] = std::make_unique<Turret>(4, -1, &objects, "assets/turret.png");
+  objects[4] = std::make_unique<Turret>(-1, 4, &objects, "assets/turret.png");
 
   Camera2D cam            = {};
   Vector2  playerPixelPos = {player.getPos().x * Constants::OFFSET,
