@@ -1,11 +1,9 @@
 #include "belt.h"
 #include "constants.h"
 #include "core.h"
-#include "enemy.h"
 #include "messages.h"
 #include "object.h"
 #include "player.h"
-#include "spawner.h"
 #include "textureManager.h"
 #include "turret.h"
 #include "utils.h"
@@ -18,93 +16,6 @@
 
 Messages       messages;
 TextureManager textureManager;
-
-void drawGrid(int spacing, Camera2D cam) {
-  float screenW = GetScreenWidth();
-  float screenH = GetScreenHeight();
-
-  Vector2 topLeft     = GetScreenToWorld2D({0, 0}, cam);
-  Vector2 bottomRight = GetScreenToWorld2D({screenW, screenH}, cam);
-
-  int startX = (int)floorf(topLeft.x / spacing) * spacing;
-  int endX   = (int)floorf(bottomRight.x / spacing + 1) * spacing;
-
-  int startY = (int)floorf(topLeft.y / spacing) * spacing;
-  int endY   = (int)floorf(bottomRight.y / spacing + 1) * spacing;
-
-  for (int x = startX; x <= endX; x += spacing) {
-    DrawLine(x, startY, x, endY, LIGHTGRAY);
-  }
-
-  for (int y = startY; y <= endY; y += spacing) {
-    DrawLine(startX, y, endX, y, LIGHTGRAY);
-  }
-}
-
-void place(int x, int y, ObjectMap& o, ObjectType t, Direction dir) {
-  std::uint64_t idx = 0;
-  for (const auto& [key, _] : o) {
-    if (key >= idx)
-      idx = key + 1;
-  }
-  switch (t) {
-  case ObjectType::Belt:
-    o[idx] = std::make_unique<Belt>(x, y, dir, "assets/belt-straight.png");
-    break;
-  case ObjectType::Enemy:
-    o[idx] = std::make_unique<Enemy>(x, y, static_cast<Core*>(o[0].get()));
-    break;
-  case ObjectType::Turret:
-    o[idx] = std::make_unique<Turret>(x, y, &o);
-    break;
-  case ObjectType::Spawner:
-    o[idx] = std::make_unique<Spawner>(x, y, o);
-    break;
-  default:
-    break;
-  }
-}
-
-Vector2 convertPosToGrid(Vector2 pos) {
-  return {pos.x / Constants::OFFSET, pos.y / Constants::OFFSET};
-}
-
-void placeObject(ObjectMap& objects, Vector2 mousePos, Direction& placeDir) {
-  Vector2 gridPos = convertPosToGrid(mousePos);
-
-  if (IsKeyPressed(KEY_ONE)) {
-    place(gridPos.x, gridPos.y, objects, ObjectType::Belt, placeDir);
-  }
-
-  if (IsKeyPressed(KEY_TWO)) {
-    place(gridPos.x, gridPos.y, objects, ObjectType::Enemy, placeDir);
-  }
-
-  if (IsKeyPressed(KEY_THREE)) {
-    place(gridPos.x, gridPos.y, objects, ObjectType::Turret, placeDir);
-  }
-
-  if (IsKeyPressed(KEY_FOUR)) {
-    place(gridPos.x, gridPos.y, objects, ObjectType::Spawner, placeDir);
-  }
-
-  if (IsKeyPressed(KEY_R)) {
-    switch (placeDir) {
-    case Direction::Up:
-      placeDir = Direction::Right;
-      break;
-    case Direction::Right:
-      placeDir = Direction::Down;
-      break;
-    case Direction::Down:
-      placeDir = Direction::Left;
-      break;
-    case Direction::Left:
-      placeDir = Direction::Up;
-      break;
-    }
-  }
-}
 
 int main(void) {
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -178,14 +89,14 @@ int main(void) {
         obj->update(player, cam);
     }
 
-    // cleanup dead enemies
-    std::vector<std::uint64_t> deadEnemies;
+    // cleanup dead objects
+    std::vector<std::uint64_t> deadObjects;
     for (auto& [id, obj] : objects) {
-      if (obj && obj->getType() == ObjectType::Enemy && obj->isDead()) {
-        deadEnemies.push_back(id);
+      if (obj && obj->isDead()) {
+        deadObjects.push_back(id);
       }
     }
-    for (auto id : deadEnemies) {
+    for (auto id : deadObjects) {
       objects.erase(id);
     }
 
