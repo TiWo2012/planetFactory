@@ -7,12 +7,12 @@ enum class MessageType {
 
 class Messages {
 public:
-  Messages();
+  Messages(MessageType initial = MessageType::None);
   ~Messages();
 
   void        setMessage(MessageType t);
   MessageType getMessage() const;
 
 private:
-  MessageType message = MessageType::None;
+  MessageType message;
 };

@@ -1,6 +1,6 @@
 #include "messages.h"
 
-Messages::Messages()  = default;
+Messages::Messages(MessageType initial) : message(initial) {}
 Messages::~Messages() = default;
 
 void Messages::setMessage(MessageType t) {

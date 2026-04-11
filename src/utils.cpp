@@ -5,6 +5,8 @@
 #include "spawner.h"
 #include "turret.h"
 #include <cmath>
+#include <optional>
+#include <print>
 #include <raylib.h>
 
 void drawArrow(Vector2 pos, Direction direction, Color color) {
@@ -166,4 +168,30 @@ void placeObject(ObjectMap& objects, Vector2 mousePos, Direction& placeDir) {
       break;
     }
   }
+}
+
+std::optional<bool> drawGameOver() {
+  DrawText("Game Over", 400, 300, 50, RED);
+
+  DrawText("Press R to restart", 400, 350, 30, WHITE);
+  if (IsKeyPressed(KEY_R)) {
+    return std::make_optional(true);
+  }
+
+  DrawText("Press ESC to exit", 400, 380, 30, WHITE);
+  if (IsKeyPressed(KEY_ESCAPE)) {
+    return std::make_optional(false);
+  }
+
+  return std::nullopt;
+}
+
+void inializeObjects(ObjectMap& objects) {
+  objects.clear();
+
+  objects[0] = std::make_unique<Core>(0, 0, "assets/core.png");
+  objects[1] = std::make_unique<Turret>(4, 4, &objects, "assets/turret.png");
+  objects[2] = std::make_unique<Turret>(-1, -1, &objects, "assets/turret.png");
+  objects[3] = std::make_unique<Turret>(4, -1, &objects, "assets/turret.png");
+  objects[4] = std::make_unique<Turret>(-1, 4, &objects, "assets/turret.png");
 }
