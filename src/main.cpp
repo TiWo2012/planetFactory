@@ -194,6 +194,16 @@ int main(void) {
       cam.offset = {(float)GetScreenWidth() / 2.0f, (float)GetScreenHeight() / 2.0f};
     }
 
+    // handle zoom logic
+    float zoomFactor = GetMouseWheelMove();
+    if (zoomFactor != 0.0f) {
+      cam.zoom += zoomFactor * 0.1f;
+      if (cam.zoom < 0.5f)
+        cam.zoom = 0.5f;
+      if (cam.zoom > 3.0f)
+        cam.zoom = 3.0f;
+    }
+
     // handle messages
     auto msg = messages.getMessage();
     if (msg == MessageType::GameOver) {
