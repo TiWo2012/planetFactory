@@ -22,6 +22,8 @@ void simulate(ObjectMap& objects,
               Vector2    mousePos,
               Direction& placeDir,
               double     dt) {
+  static std::vector<Vector2> ocupied;
+
   // handle place logic
   placeObject(objects, mousePos, placeDir);
 

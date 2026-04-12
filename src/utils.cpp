@@ -20,6 +20,7 @@
 #include <optional>
 #include <print>
 #include <raylib.h>
+#include <vector>
 
 /**
  * @brief Draw an arrow indicating direction at a position
@@ -174,24 +175,45 @@ Vector2 convertPosToGrid(Vector2 pos) {
  * @param objects Object map to add objects to
  * @param mousePos Mouse position for placement
  * @param placeDir Reference to current placement direction (modified by R key)
+ * @param ocupied Vector of occupied grid positions
  */
-void placeObject(ObjectMap& objects, Vector2 mousePos, Direction& placeDir) {
+void placeObject(ObjectMap&            objects,
+                 Vector2               mousePos,
+                 Direction&            placeDir,
+                 std::vector<Vector2>& ocupied) {
   Vector2 gridPos = convertPosToGrid(mousePos);
+
+  // Check if position is already occupied
+  bool isOccupied = false;
+  for (const auto& pos : ocupied) {
+    if (pos.x == gridPos.x && pos.y == gridPos.y) {
+      isOccupied = true;
+      break;
+    }
+  }
+
+  if (isOccupied) {
+    return; // Don't place if position is occupied
+  }
 
   if (IsKeyPressed(KEY_ONE)) {
     place(gridPos.x, gridPos.y, objects, ObjectType::Belt, placeDir);
+    ocupied.push_back(gridPos);
   }
 
   if (IsKeyPressed(KEY_TWO)) {
     place(gridPos.x, gridPos.y, objects, ObjectType::Enemy, placeDir);
+    ocupied.push_back(gridPos);
   }
 
   if (IsKeyPressed(KEY_THREE)) {
     place(gridPos.x, gridPos.y, objects, ObjectType::Turret, placeDir);
+    ocupied.push_back(gridPos);
   }
 
   if (IsKeyPressed(KEY_FOUR)) {
     place(gridPos.x, gridPos.y, objects, ObjectType::Spawner, placeDir);
+    ocupied.push_back(gridPos);
   }
 
   if (IsKeyPressed(KEY_R)) {
