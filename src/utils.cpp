@@ -1,3 +1,15 @@
+/**
+ * @file utils.cpp
+ * @brief Implementation of utility functions for the game
+ *
+ * This file provides various utility functions used throughout the game, including:
+ * - Drawing visual elements (arrows, grid)
+ * - Placing game objects on the map
+ * - Converting between coordinate systems
+ * - Handling game over screen
+ * - Initializing default game objects
+ */
+
 #include "utils.h"
 #include "belt.h"
 #include "constants.h"
@@ -9,6 +21,12 @@
 #include <print>
 #include <raylib.h>
 
+/**
+ * @brief Draw an arrow indicating direction at a position
+ * @param pos Position to draw the arrow
+ * @param direction Direction the arrow should point
+ * @param color Color of the arrow
+ */
 void drawArrow(Vector2 pos, Direction direction, Color color) {
   // Draw arrow based on direction
   switch (direction) {
@@ -83,6 +101,11 @@ void drawArrow(Vector2 pos, Direction direction, Color color) {
   }
 }
 
+/**
+ * @brief Draw a grid on screen based on camera view
+ * @param spacing Grid spacing in pixels
+ * @param cam Camera2D reference for view calculations
+ */
 void drawGrid(int spacing, Camera2D cam) {
   float screenW = GetScreenWidth();
   float screenH = GetScreenHeight();
@@ -105,6 +128,14 @@ void drawGrid(int spacing, Camera2D cam) {
   }
 }
 
+/**
+ * @brief Place a game object at grid position (x, y)
+ * @param x Grid X coordinate
+ * @param y Grid Y coordinate
+ * @param o Object map to add the object to
+ * @param t Type of object to place
+ * @param dir Direction for the object (used for belts)
+ */
 void place(int x, int y, ObjectMap& o, ObjectType t, Direction dir) {
   std::uint64_t idx = 0;
   for (const auto& [key, _] : o) {
@@ -129,10 +160,21 @@ void place(int x, int y, ObjectMap& o, ObjectType t, Direction dir) {
   }
 }
 
+/**
+ * @brief Convert pixel position to grid coordinates
+ * @param pos Position in pixels
+ * @return Grid coordinates
+ */
 Vector2 convertPosToGrid(Vector2 pos) {
   return {pos.x / Constants::OFFSET, pos.y / Constants::OFFSET};
 }
 
+/**
+ * @brief Handle object placement based on keyboard input
+ * @param objects Object map to add objects to
+ * @param mousePos Mouse position for placement
+ * @param placeDir Reference to current placement direction (modified by R key)
+ */
 void placeObject(ObjectMap& objects, Vector2 mousePos, Direction& placeDir) {
   Vector2 gridPos = convertPosToGrid(mousePos);
 
@@ -170,6 +212,10 @@ void placeObject(ObjectMap& objects, Vector2 mousePos, Direction& placeDir) {
   }
 }
 
+/**
+ * @brief Draw game over screen and handle restart/exit input
+ * @return std::nullopt if no action, true to restart, false to exit
+ */
 std::optional<bool> drawGameOver() {
   DrawText("Game Over", 400, 300, 50, RED);
 
@@ -186,6 +232,10 @@ std::optional<bool> drawGameOver() {
   return std::nullopt;
 }
 
+/**
+ * @brief Initialize default game objects (core and turrets)
+ * @param objects Object map to populate with default objects
+ */
 void inializeObjects(ObjectMap& objects) {
   objects.clear();
 

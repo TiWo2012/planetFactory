@@ -1,3 +1,13 @@
+/**
+ * @file enemy.cpp
+ * @brief Implementation of enemy entities that attack the core
+ *
+ * This file implements the Enemy class, which represents hostile entities that
+ * move towards the core and damage it upon collision. Enemies spawn from spawners
+ * and navigate towards the core's position. When they collide with the core,
+ * they deal damage and bounce back.
+ */
+
 #include "enemy.h"
 #include "constants.h"
 #include "messages.h"
@@ -10,18 +20,37 @@
 extern Messages       messages;
 extern TextureManager textureManager;
 
+/**
+ * @brief Construct an enemy at position (x, y) targeting a core
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param core Pointer to the core to target
+ */
 Enemy::Enemy(float x, float y, Core* core) : Object(ObjectType::Enemy), core(core) {
   pos = {x, y};
 }
 
+/**
+ * @brief Construct an enemy at position (x, y) with texture targeting a core
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param core Pointer to the core to target
+ * @param texturePath Path to the texture file
+ */
 Enemy::Enemy(float x, float y, Core* core, const char* texturePath)
     : Object(ObjectType::Enemy), core(core) {
   pos     = {x, y};
   texture = textureManager.loadTexture(texturePath);
 }
 
+/**
+ * @brief Destroy the enemy
+ */
 Enemy::~Enemy() = default;
 
+/**
+ * @brief Draw the enemy on screen
+ */
 void Enemy::draw() {
   if (texture != nullptr && texture->id != 0) {
     Vector2 position = {pos.x * Constants::OFFSET, pos.y * Constants::OFFSET};
@@ -34,6 +63,11 @@ void Enemy::draw() {
   }
 }
 
+/**
+ * @brief Update enemy state - move towards core and handle collision
+ * @param p Player reference (unused in current implementation)
+ * @param cam Camera2D reference (unused in current implementation)
+ */
 void Enemy::update(Player& p, Camera2D cam) {
   // calculate dircetion towards 0, 0
   float dx  = -pos.x;
